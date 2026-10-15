@@ -1,0 +1,54 @@
+# ============================================================
+# Gera os ícones PNG do PWA automaticamente
+# Roda quando:
+#   - icons-src/*.svg muda
+#   - generate-icons.js muda
+#   - package.json muda
+#   - manualmente pela aba Actions
+# ============================================================
+name: Generate PWA Icons
+
+on:
+  push:
+    paths:
+      - 'icons-src/**'
+      - 'generate-icons.js'
+      - 'package.json'
+      - '.github/workflows/icons.yml'
+  workflow_dispatch:  # permite rodar manualmente
+
+jobs:
+  generate:
+    name: Gerar ícones PNG
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write  # permite commitar de volta
+
+    steps:
+      - name: 📥 Checkout do repositório
+        uses: actions/checkout@v4
+
+      - name: 🟢 Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: 📦 Instalar dependências
+        run: npm install --no-audit --no-fund
+
+      - name: 🎨 Gerar ícones
+        run: npm run icons
+
+      - name: 📤 Commit e push dos PNGs gerados
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add icons/
+          if git diff --staged --quiet; then
+            echo "ℹ️  Nenhuma mudança nos ícones. Nada a commitar."
+          else
+            git commit -m "chore: gerar ícones PWA [skip ci]"
+            git push
+            echo "✅ Ícones commitados!"
+          fi
