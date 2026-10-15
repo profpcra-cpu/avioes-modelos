@@ -1,6 +1,6 @@
 /* ============================================================
-   BALL SORT — Airplane Builder | Motor 3D estável
-   Etapa 1: recuperar drag funcional
+   AIRPLANE BUILDER — Motor 3D + Menu + HUD
+   Camada 1: menu com 4 aviões, HUD com stats
    ============================================================ */
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
@@ -20,6 +20,7 @@ const AIRPLANES = [
     id: 'paper',
     name: 'Avião de Papel',
     emoji: '📄',
+    difficulty: 1,
     parts: [
       { id:'fuselage',  color:0x38bdf8, geo:['cylinder',[0.5,0.5,3.5,16]],  slot:{pos:[0,0.6,0],   rot:[0,0,Math.PI/2]} },
       { id:'wing',      color:0xf43f5e, geo:['box',[4.5,0.15,1]],           slot:{pos:[0,0.6,0],   rot:[0,0,0]} },
@@ -27,8 +28,59 @@ const AIRPLANES = [
       { id:'fin',       color:0xa855f7, geo:['box',[0.8,0.8,0.15]],         slot:{pos:[-1.7,1.05,0],rot:[0,0,0]} },
       { id:'propeller', color:0x22c55e, geo:['cone',[0.4,0.7,8]],           slot:{pos:[2.1,0.6,0], rot:[0,0,-Math.PI/2]} }
     ]
+  },
+  {
+    id: 'fighter',
+    name: 'Caça',
+    emoji: '🛩️',
+    difficulty: 2,
+    parts: [
+      { id:'fuselage', color:0x0ea5e9, geo:['cylinder',[0.45,0.6,3.8,16]], slot:{pos:[0,0.6,0], rot:[0,0,Math.PI/2]} },
+      { id:'wing',     color:0xef4444, geo:['box',[5,0.15,1.2]],          slot:{pos:[0,0.6,0], rot:[0,0,0]} },
+      { id:'tail',     color:0xf59e0b, geo:['box',[1.6,0.15,0.9]],        slot:{pos:[-1.5,0.6,0], rot:[0,0,0]} },
+      { id:'fin',      color:0xa855f7, geo:['box',[0.8,1,0.15]],          slot:{pos:[-1.7,1.15,0], rot:[0,0,0]} },
+      { id:'nose',     color:0x22c55e, geo:['cone',[0.45,0.8,16]],        slot:{pos:[2,0.6,0], rot:[0,0,-Math.PI/2]} }
+    ]
+  },
+  {
+    id: 'biplane',
+    name: 'Biplano',
+    emoji: '🛫',
+    difficulty: 3,
+    parts: [
+      { id:'fuselage', color:0xf59e0b, geo:['cylinder',[0.5,0.5,3.2,16]], slot:{pos:[0,0.6,0], rot:[0,0,Math.PI/2]} },
+      { id:'wing-top', color:0xfacc15, geo:['box',[4.5,0.15,1]],          slot:{pos:[0,1.15,0], rot:[0,0,0]} },
+      { id:'wing-bottom', color:0xfacc15, geo:['box',[4.5,0.15,1]],       slot:{pos:[0,0.25,0], rot:[0,0,0]} },
+      { id:'pillar-l', color:0xdc2626, geo:['box',[0.08,0.8,0.08]],       slot:{pos:[0,0.7,-0.45], rot:[0,0,0]} },
+      { id:'pillar-r', color:0xdc2626, geo:['box',[0.08,0.8,0.08]],       slot:{pos:[0,0.7,0.45], rot:[0,0,0]} },
+      { id:'propeller', color:0x22c55e, geo:['box',[0.12,1.2,0.15]],      slot:{pos:[1.8,0.6,0], rot:[0,0,0]} }
+    ]
+  },
+  {
+    id: 'jet',
+    name: 'Jato Comercial',
+    emoji: '✈️',
+    difficulty: 4,
+    parts: [
+      { id:'fuselage', color:0x38bdf8, geo:['cylinder',[0.55,0.55,5,16]], slot:{pos:[0,0.7,0], rot:[0,0,Math.PI/2]} },
+      { id:'wing-l', color:0xef4444, geo:['box',[2.4,0.15,1.3]], slot:{pos:[-0.2,0.45,-1.6], rot:[0,0.3,0]} },
+      { id:'wing-r', color:0xef4444, geo:['box',[2.4,0.15,1.3]], slot:{pos:[-0.2,0.45,1.6], rot:[0,-0.3,0]} },
+      { id:'tail-wing', color:0xf59e0b, geo:['box',[1.6,0.12,1.1]], slot:{pos:[-2.2,0.7,0], rot:[0,0,0]} },
+      { id:'fin', color:0xf43f5e, geo:['box',[0.9,1.3,0.15]], slot:{pos:[-2.3,1.35,0], rot:[0,0,0]} },
+      { id:'engine-l', color:0x22c55e, geo:['cylinder',[0.35,0.35,1.1,12]], slot:{pos:[0.2,0.2,-1.9], rot:[0,0,Math.PI/2]} },
+      { id:'engine-r', color:0x22c55e, geo:['cylinder',[0.35,0.35,1.1,12]], slot:{pos:[0.2,0.2,1.9], rot:[0,0,Math.PI/2]} },
+      { id:'nose', color:0xa855f7, geo:['cone',[0.55,0.7,16]], slot:{pos:[2.7,0.7,0], rot:[0,0,-Math.PI/2]} }
+    ]
   }
 ];
+
+/* ---------- STORAGE ---------- */
+const Storage = {
+  get(k, fb=null){ try{ const r=localStorage.getItem(k); return r===null?fb:r; }catch{ return fb; } },
+  set(k,v){ try{ localStorage.setItem(k,String(v)); }catch{} },
+  getJSON(k, fb){ try{ const r=localStorage.getItem(k); return r===null?fb:JSON.parse(r); }catch{ return fb; } },
+  setJSON(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch{} }
+};
 
 /* ---------- THREE.JS ---------- */
 const container = document.getElementById('canvas-container');
@@ -48,7 +100,7 @@ const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 controls.dampingFactor = 0.08;
 controls.minDistance = 4;
-controls.maxDistance = 18;
+controls.maxDistance = 20;
 controls.target.set(0, 0.6, 0);
 
 scene.add(new THREE.AmbientLight(0xffffff, 0.65));
@@ -66,12 +118,17 @@ scene.add(grid);
 
 /* ---------- ESTADO ---------- */
 const state = {
+  currentPlane: null,
   meshes: new Map(),
   slots: new Map(),
   draggable: [],
   placedParts: new Set(),
   dragging: null,
-  hovered: null
+  hovered: null,
+  moves: 0,
+  startTime: 0,
+  timerInterval: null,
+  completedPlanes: Storage.getJSON('airplane.completed', []) || []
 };
 
 /* ---------- GEOMETRIA ---------- */
@@ -86,51 +143,93 @@ const buildGeometry = (def) => {
   }
 };
 
-/* ---------- CARREGAR ---------- */
-const plane = AIRPLANES[0];
+/* ---------- LIMPAR CENA ---------- */
+const clearScene = () => {
+  for (const m of state.meshes.values()) scene.remove(m);
+  for (const s of state.slots.values()) scene.remove(s);
+  state.meshes.clear();
+  state.slots.clear();
+  state.draggable.length = 0;
+  state.placedParts.clear();
+};
 
-/* Ghosts */
-plane.parts.forEach(part => {
-  const geo = buildGeometry(part.geo);
-  const mat = new THREE.MeshBasicMaterial({
-    color: 0xfbbf24, transparent: true, opacity: 0.35, wireframe: true
+/* ---------- CARREGAR AVIÃO ---------- */
+const loadPlane = (planeId) => {
+  const plane = AIRPLANES.find(p => p.id === planeId);
+  if (!plane) return;
+
+  clearScene();
+  state.currentPlane = plane;
+  state.moves = 0;
+  state.startTime = Date.now();
+
+  /* Ghosts */
+  plane.parts.forEach(part => {
+    const geo = buildGeometry(part.geo);
+    const mat = new THREE.MeshBasicMaterial({
+      color: 0xfbbf24, transparent: true, opacity: 0.35, wireframe: true
+    });
+    const ghost = new THREE.Mesh(geo, mat);
+    ghost.position.set(...part.slot.pos);
+    ghost.rotation.set(...part.slot.rot);
+    scene.add(ghost);
+    state.slots.set(part.id, ghost);
   });
-  const ghost = new THREE.Mesh(geo, mat);
-  ghost.position.set(...part.slot.pos);
-  ghost.rotation.set(...part.slot.rot);
-  scene.add(ghost);
-  state.slots.set(part.id, ghost);
-});
 
-/* Peças — espalhadas em arco */
-plane.parts.forEach((part, i) => {
-  const geo = buildGeometry(part.geo);
-  const mat = new THREE.MeshStandardMaterial({
-    color: part.color, metalness: 0.15, roughness: 0.4,
-    emissive: part.color, emissiveIntensity: 0.15
+  /* Peças */
+  plane.parts.forEach((part, i) => {
+    const geo = buildGeometry(part.geo);
+    const mat = new THREE.MeshStandardMaterial({
+      color: part.color, metalness: 0.15, roughness: 0.4,
+      emissive: part.color, emissiveIntensity: 0.15
+    });
+    const mesh = new THREE.Mesh(geo, mat);
+    mesh.castShadow = true;
+    mesh.userData.partId = part.id;
+
+    const angle = (i / plane.parts.length) * Math.PI - Math.PI/2;
+    const radius = 6;
+    mesh.position.set(
+      Math.cos(angle) * radius * 1.3,
+      -0.3,
+      Math.sin(angle) * radius * 0.7 + 5
+    );
+    mesh.rotation.set(
+      (Math.random()-0.5)*0.4,
+      Math.random()*Math.PI*2,
+      (Math.random()-0.5)*0.4
+    );
+    mesh.userData.origin = mesh.position.clone();
+
+    scene.add(mesh);
+    state.meshes.set(part.id, mesh);
+    state.draggable.push(mesh);
   });
-  const mesh = new THREE.Mesh(geo, mat);
-  mesh.castShadow = true;
-  mesh.userData.partId = part.id;
 
-  const angle = (i / plane.parts.length) * Math.PI - Math.PI/2;
-  const radius = 6;
-  mesh.position.set(
-    Math.cos(angle) * radius * 1.3,
-    -0.3,
-    Math.sin(angle) * radius * 0.7 + 5
-  );
-  mesh.rotation.set(
-    (Math.random()-0.5)*0.4,
-    Math.random()*Math.PI*2,
-    (Math.random()-0.5)*0.4
-  );
-  mesh.userData.origin = mesh.position.clone();
+  const dist = 7.5 + plane.parts.length * 0.15;
+  camera.position.set(dist * 0.7, dist * 0.55, dist);
+  controls.target.set(0, 0.6, 0);
 
-  scene.add(mesh);
-  state.meshes.set(part.id, mesh);
-  state.draggable.push(mesh);
-});
+  /* Atualiza HUD */
+  document.getElementById('hud-title').textContent = plane.emoji + ' ' + plane.name.toUpperCase();
+  updateHUD();
+  startTimer();
+};
+
+/* ---------- HUD ---------- */
+const updateHUD = () => {
+  document.getElementById('stat-parts').textContent =
+    `${state.placedParts.size}/${state.currentPlane.parts.length}`;
+  document.getElementById('stat-moves').textContent = state.moves;
+};
+
+const startTimer = () => {
+  clearInterval(state.timerInterval);
+  state.timerInterval = setInterval(() => {
+    const secs = Math.floor((Date.now() - state.startTime) / 1000);
+    document.getElementById('stat-time').textContent = `${secs}s`;
+  }, 1000);
+};
 
 /* ---------- DRAG & DROP ---------- */
 const raycaster = new THREE.Raycaster();
@@ -146,6 +245,7 @@ const updatePointer = (e) => {
 
 const onDown = (e) => {
   if (e.button !== undefined && e.button !== 0) return;
+  if (!state.currentPlane) return;
 
   updatePointer(e);
   raycaster.setFromCamera(pointer, camera);
@@ -166,7 +266,6 @@ const onDown = (e) => {
   raycaster.ray.intersectPlane(dragPlane, intersect);
   dragOffset.copy(state.dragging.position).sub(intersect);
 
-  /* Escala ao pegar */
   state.dragging.userData._s = 1;
   const up = () => {
     if (!state.dragging) return;
@@ -176,13 +275,11 @@ const onDown = (e) => {
   };
   up();
 
-  /* Captura o ponteiro para não perder o drag */
-  try {
-    renderer.domElement.setPointerCapture(e.pointerId);
-  } catch {}
+  try { renderer.domElement.setPointerCapture(e.pointerId); } catch {}
 };
 
 const onMove = (e) => {
+  if (!state.currentPlane) return;
   updatePointer(e);
   raycaster.setFromCamera(pointer, camera);
 
@@ -193,7 +290,6 @@ const onMove = (e) => {
     return;
   }
 
-  /* Hover */
   const hits = raycaster.intersectObjects(state.draggable, false);
   if (hits.length) {
     const obj = hits[0].object;
@@ -220,7 +316,6 @@ const onUp = (e) => {
   state.dragging = null;
   controls.enabled = true;
 
-  /* Volta a escala */
   mesh.userData._s = CONFIG.PICKUP_SCALE;
   const down = () => {
     mesh.userData._s = Math.max(1, mesh.userData._s - 0.05);
@@ -232,7 +327,7 @@ const onUp = (e) => {
 
   const partId = mesh.userData.partId;
   const slot = state.slots.get(partId);
-  const part = plane.parts.find(p => p.id === partId);
+  const part = state.currentPlane.parts.find(p => p.id === partId);
   const dist = mesh.position.distanceTo(slot.position);
 
   if (dist < CONFIG.SNAP_DISTANCE) {
@@ -262,7 +357,13 @@ const snap = (mesh, part, slot) => {
     else {
       slot.visible = false;
       state.placedParts.add(part.id);
-      console.log(`✅ Peça encaixada: ${part.id} (${state.placedParts.size}/${plane.parts.length})`);
+      state.moves++;
+      updateHUD();
+      console.log(`✅ ${part.id} (${state.placedParts.size}/${state.currentPlane.parts.length})`);
+
+      if (state.placedParts.size === state.currentPlane.parts.length) {
+        setTimeout(onWin, 600);
+      }
     }
   };
   anim();
@@ -281,7 +382,23 @@ const returnHome = (mesh) => {
   anim();
 };
 
-/* ---------- EVENTOS ---------- */
+/* ---------- WIN ---------- */
+const onWin = () => {
+  clearInterval(state.timerInterval);
+  const planeId = state.currentPlane.id;
+  if (!state.completedPlanes.includes(planeId)) {
+    state.completedPlanes.push(planeId);
+    Storage.setJSON('airplane.completed', state.completedPlanes);
+  }
+  const secs = Math.floor((Date.now() - state.startTime) / 1000);
+  document.getElementById('win-title').textContent = `${state.currentPlane.emoji} Montado!`;
+  document.getElementById('win-message').textContent = `Você completou o ${state.currentPlane.name}!`;
+  document.getElementById('win-moves').textContent = state.moves;
+  document.getElementById('win-time').textContent = `${secs}s`;
+  document.getElementById('win-modal').classList.add('active');
+};
+
+/* ---------- EVENTOS 3D ---------- */
 renderer.domElement.addEventListener('pointerdown', onDown);
 renderer.domElement.addEventListener('pointermove', onMove);
 renderer.domElement.addEventListener('pointerup', onUp);
@@ -322,4 +439,79 @@ const animate = () => {
 };
 animate();
 
-console.log('✅ game.js carregado —', plane.parts.length, 'peças criadas');
+/* ============================================================
+   INTERFACE — MENU E BOTÕES
+   ============================================================ */
+const $ = id => document.getElementById(id);
+
+const renderMenu = () => {
+  const grid = $('plane-grid');
+  grid.replaceChildren();
+
+  AIRPLANES.forEach((plane, idx) => {
+    const completed = state.completedPlanes.includes(plane.id);
+    const locked = idx > 0 && !state.completedPlanes.includes(AIRPLANES[idx-1].id);
+
+    const card = document.createElement('button');
+    card.type = 'button';
+    card.className = 'plane-card';
+    if (completed) card.classList.add('completed');
+    if (locked) card.classList.add('locked');
+    card.disabled = locked;
+
+    const emoji = document.createElement('span');
+    emoji.className = 'plane-emoji';
+    emoji.textContent = plane.emoji;
+
+    const name = document.createElement('div');
+    name.className = 'plane-name';
+    name.textContent = plane.name;
+
+    const parts = document.createElement('div');
+    parts.className = 'plane-parts';
+    parts.textContent = `${plane.parts.length} peças`;
+
+    card.append(emoji, name, parts);
+    if (!locked) card.addEventListener('click', () => startPlane(plane.id));
+    grid.appendChild(card);
+  });
+};
+
+const startPlane = (planeId) => {
+  $('main-menu').classList.add('hidden');
+  $('hud-top').style.display = '';
+  $('hud-bottom').style.display = '';
+  $('win-modal').classList.remove('active');
+  loadPlane(planeId);
+};
+
+const backToMenu = () => {
+  clearInterval(state.timerInterval);
+  clearScene();
+  state.currentPlane = null;
+  $('main-menu').classList.remove('hidden');
+  $('hud-top').style.display = 'none';
+  $('hud-bottom').style.display = 'none';
+  $('win-modal').classList.remove('active');
+  renderMenu();
+};
+
+/* Botões */
+$('btn-back').addEventListener('click', backToMenu);
+
+$('btn-reset').addEventListener('click', () => {
+  if (!state.currentPlane) return;
+  loadPlane(state.currentPlane.id);
+});
+
+$('btn-next').addEventListener('click', () => {
+  const idx = AIRPLANES.indexOf(state.currentPlane);
+  const next = AIRPLANES[idx + 1];
+  if (next) startPlane(next.id);
+  else backToMenu();
+});
+
+/* Boot */
+renderMenu();
+document.getElementById('loading').classList.add('hidden');
+console.log('✅ game.js carregado —', AIRPLANES.length, 'aviões disponíveis');
