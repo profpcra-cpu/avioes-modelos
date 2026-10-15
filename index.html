@@ -292,4 +292,241 @@
     margin:0 0 12px;
   }
   .ped-pane-title.sci{color:#22d3ee}
-  .
+  .ped-pane-title.mat{color:#fbbf24}
+  .ped-pane-title.por{color:#f472b6}
+  .ped-pane-title.eng{color:#a78bfa}
+
+  .ped-text{
+    font-size:14px; line-height:1.6;
+    color:#e2e8f0;
+    margin:0 0 12px;
+  }
+
+  .ped-fact{
+    padding:12px 14px;
+    border-radius:0 12px 12px 0;
+    font-size:13px; line-height:1.5;
+    margin:12px 0 0;
+    border-left:3px solid;
+  }
+  .ped-fact.sci{background:rgba(34,211,238,.1); border-left-color:#22d3ee}
+  .ped-fact.mat{background:rgba(251,191,36,.1); border-left-color:#fbbf24}
+  .ped-fact.por{background:rgba(244,114,182,.1); border-left-color:#f472b6}
+  .ped-fact.eng{background:rgba(167,139,250,.1); border-left-color:#a78bfa}
+
+  /* Sílabas */
+  .syllables-row{
+    display:flex; gap:6px; flex-wrap:wrap;
+    justify-content:center;
+    margin:14px 0;
+  }
+  .syllable{
+    display:inline-block;
+    padding:4px 10px;
+    border-radius:8px;
+    font-weight:800;
+    font-family:'Fredoka',sans-serif;
+    font-size:20px;
+  }
+  .syllable.vowel{background:rgba(244,114,182,.25); color:#fbcfe8}
+  .syllable.cons{background:rgba(59,130,246,.25); color:#bfdbfe}
+
+  /* Família */
+  .ped-fam{
+    display:flex; flex-wrap:wrap; gap:6px;
+    margin:8px 0 12px;
+  }
+  .fam-tag{
+    padding:4px 10px;
+    background:rgba(244,114,182,.15);
+    border-radius:999px;
+    font-size:12px;
+    color:#fbcfe8;
+    font-weight:600;
+  }
+
+  /* Inglês */
+  .eng-word{
+    font-family:'Fredoka',sans-serif;
+    font-size:32px; font-weight:700;
+    color:#fff;
+    text-align:center;
+    margin:12px 0 6px;
+  }
+  .eng-pron{
+    text-align:center;
+    color:#a78bfa;
+    font-size:14px;
+    margin-bottom:14px;
+  }
+  .eng-example{
+    font-style:italic;
+    color:#ddd6fe;
+    font-weight:600;
+    font-size:15px;
+  }
+  .eng-translation{
+    color:#94a3b8;
+    font-size:12px;
+    margin-top:6px;
+  }
+
+  .ped-actions{
+    padding:12px 20px 16px;
+    border-top:1px solid rgba(125,211,252,.2);
+    display:flex; gap:8px;
+  }
+  .ped-btn{
+    flex:1;
+    padding:12px;
+    border-radius:12px;
+    border:none;
+    font-size:13px; font-weight:700;
+    cursor:pointer;
+    transition:all .2s;
+    display:flex; align-items:center; justify-content:center; gap:6px;
+  }
+  .ped-btn-listen{
+    background:rgba(34,211,238,.15);
+    border:1px solid rgba(34,211,238,.4);
+    color:#22d3ee;
+  }
+  .ped-btn-listen:hover{background:rgba(34,211,238,.25)}
+  .ped-btn-next{
+    background:linear-gradient(135deg,#0ea5e9,#3b82f6);
+    color:#fff;
+    box-shadow:0 4px 14px rgba(14,165,233,.35);
+  }
+  .ped-btn-next:hover{transform:translateY(-2px)}
+
+  /* LOADING */
+  .loading{
+    position:fixed; inset:0;
+    display:flex; align-items:center; justify-content:center;
+    background:#0a1628;
+    z-index:300;
+    font-size:14px; color:#7dd3fc;
+    transition:opacity .4s;
+  }
+  .loading.hidden{opacity:0; pointer-events:none}
+
+  /* Mobile */
+  @media (max-width:480px){
+    .ped-name-pt{font-size:20px}
+    .ped-tab{font-size:9px; padding:8px 4px 10px}
+    .ped-tab .tab-icon{font-size:16px}
+    .ped-body{padding:16px}
+    .eng-word{font-size:26px}
+  }
+</style>
+</head>
+<body>
+
+<div id="canvas-container"></div>
+
+<!-- MENU -->
+<div class="main-menu" id="main-menu">
+  <div class="menu-header">
+    <h1>✈️ AIRPLANE BUILDER</h1>
+    <p>Escolha um avião para montar</p>
+  </div>
+  <div class="plane-grid" id="plane-grid"></div>
+</div>
+
+<!-- HUD TOP -->
+<div class="hud-top" id="hud-top" style="display:none">
+  <div class="hud-actions">
+    <button class="btn-icon" id="btn-back" type="button" aria-label="Voltar">←</button>
+    <button class="btn-icon" id="btn-voice" type="button" aria-label="Voz" title="Voz">🔊</button>
+  </div>
+  <div>
+    <div class="hud-title" id="hud-title">AVIÃO</div>
+    <div class="hud-stats">
+      <span>Peças: <b id="stat-parts">0/0</b></span>
+      <span>Movs: <b id="stat-moves">0</b></span>
+      <span>Tempo: <b id="stat-time">0s</b></span>
+    </div>
+  </div>
+  <div></div>
+</div>
+
+<!-- HUD BOTTOM -->
+<div class="hud-bottom" id="hud-bottom" style="display:none">
+  <button class="btn secondary" id="btn-reset" type="button">🔄 Reiniciar</button>
+</div>
+
+<!-- WIN MODAL -->
+<div class="win-modal" id="win-modal">
+  <div class="win-card">
+    <div class="win-emoji">🎉</div>
+    <h2 id="win-title">Avião Montado!</h2>
+    <p id="win-message">Parabéns!</p>
+    <div class="win-stats">
+      <div><div class="win-stat-value" id="win-moves">0</div><div class="win-stat-label">Movs</div></div>
+      <div><div class="win-stat-value" id="win-time">0s</div><div class="win-stat-label">Tempo</div></div>
+    </div>
+    <button class="btn" id="btn-next" type="button" style="width:100%; justify-content:center">▶ Próximo Avião</button>
+  </div>
+</div>
+
+<!-- CARD PEDAGÓGICO -->
+<div class="ped-overlay" id="ped-overlay">
+  <div class="ped-card">
+    <div class="ped-header">
+      <div class="ped-emoji" id="ped-emoji">✈️</div>
+      <div class="ped-names">
+        <h2 class="ped-name-pt" id="ped-name-pt">Peça</h2>
+        <div class="ped-name-en">
+          <span id="ped-en-word">Piece</span>
+          <span class="pron" id="ped-en-pron">/piːs/</span>
+        </div>
+      </div>
+      <button class="ped-close" id="ped-close" type="button" aria-label="Fechar">×</button>
+    </div>
+
+    <div class="ped-tabs">
+      <button class="ped-tab active" data-tab="sci" type="button">
+        <span class="tab-icon">🔬</span>
+        <span>Ciências</span>
+      </button>
+      <button class="ped-tab" data-tab="mat" type="button">
+        <span class="tab-icon">🔢</span>
+        <span>Matemática</span>
+      </button>
+      <button class="ped-tab" data-tab="por" type="button">
+        <span class="tab-icon">📖</span>
+        <span>Português</span>
+      </button>
+      <button class="ped-tab" data-tab="eng" type="button">
+        <span class="tab-icon">🌍</span>
+        <span>Inglês</span>
+      </button>
+    </div>
+
+    <div class="ped-body" id="ped-body"></div>
+
+    <div class="ped-actions">
+      <button class="ped-btn ped-btn-listen" id="ped-listen" type="button">
+        🔊 Ouvir
+      </button>
+      <button class="ped-btn ped-btn-next" id="ped-next" type="button">
+        ▶ Continuar
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="loading" id="loading">Carregando...</div>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+
+<script type="module" src="./game.js"></script>
+</body>
+</html>
