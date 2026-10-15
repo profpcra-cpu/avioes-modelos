@@ -4,6 +4,7 @@
    ============================================================ */
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { Voice } from './voice.js';
 
 /* ---------- CONFIG ---------- */
 const CONFIG = Object.freeze({
