@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <defs>
+    <linearGradient id="p" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7dd3fc"/>
+      <stop offset="100%" stop-color="#3b82f6"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="32" height="32" rx="7" fill="#0a1628"/>
+
+  <!-- Avião simplificado -->
+  <g transform="translate(16 16) rotate(-15) translate(-16 -16)">
+    <!-- Fuselagem -->
+    <path d="M 16 4 C 18 4 19 9 19 14 L 19 26 C 19 29 17 30 16 30
+             C 15 30 13 29 13 26 L 13 14 C 13 9 14 4 16 4 Z"
+          fill="url(#p)"/>
+    <!-- Asa esquerda -->
+    <path d="M 13 15 L 2 19 L 2 22 L 13 20 Z" fill="#0ea5e9"/>
+    <!-- Asa direita -->
+    <path d="M 19 15 L 30 19 L 30 22 L 19 20 Z" fill="#0ea5e9"/>
+    <!-- Cockpit -->
+    <ellipse cx="16" cy="10" rx="2" ry="3" fill="#bae6fd"/>
+  </g>
+</svg>
