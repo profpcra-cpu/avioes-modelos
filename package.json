@@ -1,0 +1,21 @@
+{
+  "name": "avioes-modelos",
+  "version": "1.0.0",
+  "private": true,
+  "description": "PWA de montagem de aviões em 3D — Airplane Builder",
+  "author": "profpcra-cpu",
+  "license": "MIT",
+  "scripts": {
+    "setup": "npm install && npm run icons",
+    "icons": "node generate-icons.js",
+    "serve": "npx serve -l 8000 .",
+    "start": "npm run serve"
+  },
+  "devDependencies": {
+    "sharp": "^0.33.0",
+    "serve": "^14.2.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
