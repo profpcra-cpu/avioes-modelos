@@ -1,6 +1,6 @@
 /* ============================================================
-   VOICE — Voz pedagógica em pt-BR (v2 — com retry)
-   Camada 2: narração das ações do jogo
+   VOICE — Voz pedagógica em pt-BR (v3)
+   Com tabela de pronúncia corrigida
    ============================================================ */
 
 const STORAGE_KEY = 'airplane.voice.enabled';
@@ -9,7 +9,48 @@ let enabled = localStorage.getItem(STORAGE_KEY) !== '0';
 let voicePtBR = null;
 let voiceReady = false;
 let retryCount = 0;
-const MAX_RETRIES = 30; // 30 × 100ms = 3 segundos
+const MAX_RETRIES = 30;
+
+/* ---------- Tabela de pronúncia corrigida ----------
+   Palavra escrita → Como deve ser FALADA
+   (evita erros de fonética do TTS)
+   --------------------------------------------------- */
+const PRONUNCIATION_FIX = {
+  'fuselagem':    'fuzelagem',
+  'fuselage':     'fuzelagem',
+  'asa':          'aza',
+  'cauda':        'cauda',
+  'leme':         'leme',
+  'hélice':       'élice',
+  'bico':         'bico',
+  'estabilizador':'estabilizador',
+  'motor':        'motor',
+  'esquerdo':     'esquerdo',
+  'direito':      'direito',
+  'pilar':        'pilar',
+  'traseira':     'traseira',
+  'biplano':      'biplano',
+  'avião':        'aviãum',
+  'jato':         'jato',
+  'caça':         'cassa'
+};
+
+/* ---------- Corrige o texto aplicando pronúncia ---------- */
+const fixPronunciation = (text) => {
+  let fixed = text;
+  for (const [wrong, right] of Object.entries(PRONUNCIATION_FIX)) {
+    /* Substitui apenas palavras inteiras (com limites) */
+    const regex = new RegExp(`\\b${wrong}\\b`, 'gi');
+    fixed = fixed.replace(regex, (match) => {
+      /* Mantém capitalização original */
+      if (match[0] === match[0].toUpperCase()) {
+        return right.charAt(0).toUpperCase() + right.slice(1);
+      }
+      return right;
+    });
+  }
+  return fixed;
+};
 
 /* ---------- Nomes falados das peças ---------- */
 const PART_SPEECH = {
@@ -32,27 +73,22 @@ const PART_SPEECH = {
   'tail-wing':   { name: 'asa traseira',   article: 'a' }
 };
 
-/* ---------- Carregar vozes com retry ---------- */
+/* ---------- Carregar vozes ---------- */
 const loadVoices = () => {
   if (!('speechSynthesis' in window)) {
-    console.warn('[Voice] speechSynthesis não suportado neste navegador');
+    console.warn('[Voice] speechSynthesis não suportado');
     return false;
   }
 
   const voices = speechSynthesis.getVoices();
 
-  /* Lista vazia? Tenta de novo em 100ms */
   if (voices.length === 0) {
     retryCount++;
-    if (retryCount < MAX_RETRIES) {
-      setTimeout(loadVoices, 100);
-    } else {
-      console.warn('[Voice] Desisti após 3s. Vozes nunca carregaram.');
-    }
+    if (retryCount < MAX_RETRIES) setTimeout(loadVoices, 100);
+    else console.warn('[Voice] Desisti após 3s.');
     return false;
   }
 
-  /* Lista carregada! Procura pt-BR */
   voicePtBR = voices.find(v => v.lang === 'pt-BR' && v.localService)
            || voices.find(v => v.lang === 'pt-BR')
            || voices.find(v => v.lang.startsWith('pt-BR'))
@@ -64,53 +100,37 @@ const loadVoices = () => {
     console.log('✅ Voz pt-BR pronta:', voicePtBR.name, '|', voicePtBR.lang);
     return true;
   } else {
-    console.warn('⚠️ Nenhuma voz pt-BR. Vozes disponíveis:',
-      voices.map(v => v.lang).join(', ') || '(vazio)');
+    console.warn('⚠️ Nenhuma voz pt-BR. Vozes:', voices.map(v => v.lang).join(', '));
     return false;
   }
 };
 
-/* ---------- Inicialização ---------- */
 if ('speechSynthesis' in window) {
-  /* Tenta 1: imediato */
   loadVoices();
-  /* Tenta 2: quando o navegador avisar */
-  speechSynthesis.onvoiceschanged = () => {
-    retryCount = 0;
-    loadVoices();
-  };
-  /* Tenta 3: fallback com retry (caso nada dispare) */
+  speechSynthesis.onvoiceschanged = () => { retryCount = 0; loadVoices(); };
   setTimeout(() => {
-    if (!voiceReady) {
-      console.log('[Voice] Tentando recarregar vozes...');
-      retryCount = 0;
-      loadVoices();
-    }
+    if (!voiceReady) { retryCount = 0; loadVoices(); }
   }, 500);
 }
 
-/* ---------- Função de falar ---------- */
+/* ---------- Falar ---------- */
 const speak = (text, options = {}) => {
-  if (!enabled) {
-    console.log('[Voice] Desligado — não fala:', text);
-    return;
-  }
-  if (!voiceReady) {
-    console.warn('[Voice] Voz não pronta — não fala:', text);
-    return;
-  }
+  if (!enabled) return;
+  if (!voiceReady) return;
   if (!('speechSynthesis' in window)) return;
+
+  const fixedText = fixPronunciation(text);
 
   try {
     speechSynthesis.cancel();
-    const utter = new SpeechSynthesisUtterance(text);
+    const utter = new SpeechSynthesisUtterance(fixedText);
     utter.lang = 'pt-BR';
     utter.voice = voicePtBR;
-    utter.rate = options.rate || 0.95;
-    utter.pitch = options.pitch || 1.1;
-    utter.volume = options.volume || 0.9;
+    utter.rate = options.rate || 0.9;    /* um pouco mais devagar p/ clareza */
+    utter.pitch = options.pitch || 1.05;
+    utter.volume = options.volume || 0.95;
 
-    utter.onstart = () => console.log('🔊 [Voice] falando:', text);
+    utter.onstart = () => console.log('🔊 [Voice]', fixedText);
     utter.onerror = (e) => console.warn('🔊 [Voice] erro:', e);
 
     speechSynthesis.speak(utter);
@@ -128,7 +148,6 @@ export const Voice = {
     enabled = !enabled;
     localStorage.setItem(STORAGE_KEY, enabled ? '1' : '0');
     if (!enabled && 'speechSynthesis' in window) speechSynthesis.cancel();
-    console.log('[Voice] Modo voz:', enabled ? 'LIGADO' : 'DESLIGADO');
     return enabled;
   },
 
@@ -165,16 +184,11 @@ export const Voice = {
     if ('speechSynthesis' in window) speechSynthesis.cancel();
   },
 
-  /* Pra debug — força um teste */
   test() {
-    console.log('[Voice] Teste manual');
+    console.log('[Voice] Teste');
     console.log('  - Enabled:', enabled);
     console.log('  - Ready:', voiceReady);
     console.log('  - Voz:', voicePtBR ? voicePtBR.name : 'nenhuma');
-    if (voiceReady) {
-      speak('Teste de voz funcionando perfeitamente!');
-    } else {
-      speak('A voz ainda não carregou. Tente novamente em alguns segundos.');
-    }
+    speak('Teste de voz. Fuselagem, asa, hélice.');
   }
 };
