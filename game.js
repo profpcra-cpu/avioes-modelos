@@ -532,3 +532,11 @@ if (btnVoice) {
 renderMenu();
 document.getElementById('loading').classList.add('hidden');
 console.log('✅ game.js carregado —', AIRPLANES.length, 'aviões disponíveis');
+
+/* DEBUG: tecla V força teste de voz, tecla T toca som de teste */
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'v' || e.key === 'V') {
+    console.log('🎤 Testando voz...');
+    Voice.test();
+  }
+});
