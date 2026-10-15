@@ -1,6 +1,6 @@
 /* ============================================================
-   AIRPLANE BUILDER — Motor 3D + Menu + HUD
-   Camada 1: menu com 4 aviões, HUD com stats
+   AIRPLANE BUILDER — Motor 3D + Menu + HUD + Voz
+   Camada 2: adiciona voz pedagógica em pt-BR
    ============================================================ */
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
@@ -37,10 +37,10 @@ const AIRPLANES = [
     difficulty: 2,
     parts: [
       { id:'fuselage', color:0x0ea5e9, geo:['cylinder',[0.45,0.6,3.8,16]], slot:{pos:[0,0.6,0], rot:[0,0,Math.PI/2]} },
-      { id:'wing',     color:0xef4444, geo:['box',[5,0.15,1.2]],          slot:{pos:[0,0.6,0], rot:[0,0,0]} },
-      { id:'tail',     color:0xf59e0b, geo:['box',[1.6,0.15,0.9]],        slot:{pos:[-1.5,0.6,0], rot:[0,0,0]} },
-      { id:'fin',      color:0xa855f7, geo:['box',[0.8,1,0.15]],          slot:{pos:[-1.7,1.15,0], rot:[0,0,0]} },
-      { id:'nose',     color:0x22c55e, geo:['cone',[0.45,0.8,16]],        slot:{pos:[2,0.6,0], rot:[0,0,-Math.PI/2]} }
+      { id:'wing',     color:0xef4444, geo:['box',[5,0.15,1.2]],           slot:{pos:[0,0.6,0], rot:[0,0,0]} },
+      { id:'tail',     color:0xf59e0b, geo:['box',[1.6,0.15,0.9]],         slot:{pos:[-1.5,0.6,0], rot:[0,0,0]} },
+      { id:'fin',      color:0xa855f7, geo:['box',[0.8,1,0.15]],           slot:{pos:[-1.7,1.15,0], rot:[0,0,0]} },
+      { id:'nose',     color:0x22c55e, geo:['cone',[0.45,0.8,16]],         slot:{pos:[2,0.6,0], rot:[0,0,-Math.PI/2]} }
     ]
   },
   {
@@ -49,12 +49,12 @@ const AIRPLANES = [
     emoji: '🛫',
     difficulty: 3,
     parts: [
-      { id:'fuselage', color:0xf59e0b, geo:['cylinder',[0.5,0.5,3.2,16]], slot:{pos:[0,0.6,0], rot:[0,0,Math.PI/2]} },
-      { id:'wing-top', color:0xfacc15, geo:['box',[4.5,0.15,1]],          slot:{pos:[0,1.15,0], rot:[0,0,0]} },
-      { id:'wing-bottom', color:0xfacc15, geo:['box',[4.5,0.15,1]],       slot:{pos:[0,0.25,0], rot:[0,0,0]} },
-      { id:'pillar-l', color:0xdc2626, geo:['box',[0.08,0.8,0.08]],       slot:{pos:[0,0.7,-0.45], rot:[0,0,0]} },
-      { id:'pillar-r', color:0xdc2626, geo:['box',[0.08,0.8,0.08]],       slot:{pos:[0,0.7,0.45], rot:[0,0,0]} },
-      { id:'propeller', color:0x22c55e, geo:['box',[0.12,1.2,0.15]],      slot:{pos:[1.8,0.6,0], rot:[0,0,0]} }
+      { id:'fuselage',    color:0xf59e0b, geo:['cylinder',[0.5,0.5,3.2,16]], slot:{pos:[0,0.6,0], rot:[0,0,Math.PI/2]} },
+      { id:'wing-top',    color:0xfacc15, geo:['box',[4.5,0.15,1]],          slot:{pos:[0,1.15,0], rot:[0,0,0]} },
+      { id:'wing-bottom', color:0xfacc15, geo:['box',[4.5,0.15,1]],          slot:{pos:[0,0.25,0], rot:[0,0,0]} },
+      { id:'pillar-l',    color:0xdc2626, geo:['box',[0.08,0.8,0.08]],       slot:{pos:[0,0.7,-0.45], rot:[0,0,0]} },
+      { id:'pillar-r',    color:0xdc2626, geo:['box',[0.08,0.8,0.08]],       slot:{pos:[0,0.7,0.45], rot:[0,0,0]} },
+      { id:'propeller',   color:0x22c55e, geo:['box',[0.12,1.2,0.15]],       slot:{pos:[1.8,0.6,0], rot:[0,0,0]} }
     ]
   },
   {
@@ -64,13 +64,13 @@ const AIRPLANES = [
     difficulty: 4,
     parts: [
       { id:'fuselage', color:0x38bdf8, geo:['cylinder',[0.55,0.55,5,16]], slot:{pos:[0,0.7,0], rot:[0,0,Math.PI/2]} },
-      { id:'wing-l', color:0xef4444, geo:['box',[2.4,0.15,1.3]], slot:{pos:[-0.2,0.45,-1.6], rot:[0,0.3,0]} },
-      { id:'wing-r', color:0xef4444, geo:['box',[2.4,0.15,1.3]], slot:{pos:[-0.2,0.45,1.6], rot:[0,-0.3,0]} },
-      { id:'tail-wing', color:0xf59e0b, geo:['box',[1.6,0.12,1.1]], slot:{pos:[-2.2,0.7,0], rot:[0,0,0]} },
-      { id:'fin', color:0xf43f5e, geo:['box',[0.9,1.3,0.15]], slot:{pos:[-2.3,1.35,0], rot:[0,0,0]} },
+      { id:'wing-l',   color:0xef4444, geo:['box',[2.4,0.15,1.3]], slot:{pos:[-0.2,0.45,-1.6], rot:[0,0.3,0]} },
+      { id:'wing-r',   color:0xef4444, geo:['box',[2.4,0.15,1.3]], slot:{pos:[-0.2,0.45,1.6], rot:[0,-0.3,0]} },
+      { id:'tail-wing',color:0xf59e0b, geo:['box',[1.6,0.12,1.1]], slot:{pos:[-2.2,0.7,0], rot:[0,0,0]} },
+      { id:'fin',      color:0xf43f5e, geo:['box',[0.9,1.3,0.15]], slot:{pos:[-2.3,1.35,0], rot:[0,0,0]} },
       { id:'engine-l', color:0x22c55e, geo:['cylinder',[0.35,0.35,1.1,12]], slot:{pos:[0.2,0.2,-1.9], rot:[0,0,Math.PI/2]} },
       { id:'engine-r', color:0x22c55e, geo:['cylinder',[0.35,0.35,1.1,12]], slot:{pos:[0.2,0.2,1.9], rot:[0,0,Math.PI/2]} },
-      { id:'nose', color:0xa855f7, geo:['cone',[0.55,0.7,16]], slot:{pos:[2.7,0.7,0], rot:[0,0,-Math.PI/2]} }
+      { id:'nose',     color:0xa855f7, geo:['cone',[0.55,0.7,16]], slot:{pos:[2.7,0.7,0], rot:[0,0,-Math.PI/2]} }
     ]
   }
 ];
@@ -211,10 +211,10 @@ const loadPlane = (planeId) => {
   camera.position.set(dist * 0.7, dist * 0.55, dist);
   controls.target.set(0, 0.6, 0);
 
-  /* Atualiza HUD */
   document.getElementById('hud-title').textContent = plane.emoji + ' ' + plane.name.toUpperCase();
   updateHUD();
   startTimer();
+  Voice.welcome(plane.name);
 };
 
 /* ---------- HUD ---------- */
@@ -258,6 +258,8 @@ const onDown = (e) => {
     state.dragging = null;
     return;
   }
+
+  Voice.pickup(state.dragging.userData.partId);
 
   controls.enabled = false;
 
@@ -360,6 +362,7 @@ const snap = (mesh, part, slot) => {
       state.placedParts.add(part.id);
       state.moves++;
       updateHUD();
+      Voice.snap(part.id);
       console.log(`✅ ${part.id} (${state.placedParts.size}/${state.currentPlane.parts.length})`);
 
       if (state.placedParts.size === state.currentPlane.parts.length) {
@@ -371,6 +374,7 @@ const snap = (mesh, part, slot) => {
 };
 
 const returnHome = (mesh) => {
+  Voice.wrong();
   const origin = mesh.userData.origin.clone();
   const start = mesh.position.clone();
   const t0 = performance.now();
@@ -386,6 +390,7 @@ const returnHome = (mesh) => {
 /* ---------- WIN ---------- */
 const onWin = () => {
   clearInterval(state.timerInterval);
+  Voice.win(state.currentPlane.name);
   const planeId = state.currentPlane.id;
   if (!state.completedPlanes.includes(planeId)) {
     state.completedPlanes.push(planeId);
@@ -489,6 +494,7 @@ const startPlane = (planeId) => {
 const backToMenu = () => {
   clearInterval(state.timerInterval);
   clearScene();
+  Voice.stop();
   state.currentPlane = null;
   $('main-menu').classList.remove('hidden');
   $('hud-top').style.display = 'none';
@@ -511,6 +517,16 @@ $('btn-next').addEventListener('click', () => {
   if (next) startPlane(next.id);
   else backToMenu();
 });
+
+/* Botão de voz */
+const btnVoice = $('btn-voice');
+if (btnVoice) {
+  btnVoice.textContent = Voice.isEnabled() ? '🔊' : '🔇';
+  btnVoice.addEventListener('click', () => {
+    const on = Voice.toggle();
+    btnVoice.textContent = on ? '🔊' : '🔇';
+  });
+}
 
 /* Boot */
 renderMenu();
