@@ -20,9 +20,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
 
 <style>
-/* ============================================================
-   DESIGN TOKENS
-   ============================================================ */
 :root{
   --bg-1:#0a1628; --bg-2:#1e3a5f; --bg-3:#050d18;
   --text:#f0f9ff; --text-muted:#94a3b8; --text-dim:#475569;
@@ -32,12 +29,11 @@
   --accent-1:#0ea5e9; --accent-2:#3b82f6; --accent-3:#7dd3fc;
   --success:#4ade80; --warning:#fbbf24; --danger:#ef4444;
   --btn-bg:linear-gradient(135deg,#0ea5e9,#3b82f6);
-  --btn-accent:linear-gradient(135deg,#06b6d4,#0891b2);
   --shadow-sm:0 4px 12px rgba(0,0,0,.35);
   --shadow-md:0 8px 24px rgba(0,0,0,.45);
   --shadow-lg:0 16px 48px rgba(0,0,0,.6);
   --glow-cyan:0 0 24px rgba(125,211,252,.5);
-  --glow-green:0 0 24px rgba(74,222,128,.5);
+  --glow-gold:0 0 30px rgba(251,191,36,.6);
   --t-fast:.15s cubic-bezier(.16,1,.3,1);
   --t-base:.25s cubic-bezier(.16,1,.3,1);
   --t-slow:.4s cubic-bezier(.16,1,.3,1);
@@ -46,10 +42,6 @@
   --safe-top:env(safe-area-inset-top,0px);
   --safe-bottom:env(safe-area-inset-bottom,0px);
 }
-
-/* ============================================================
-   RESET & BASE
-   ============================================================ */
 *,*::before,*::after{box-sizing:border-box}
 html,body{
   height:100%; margin:0;
@@ -67,37 +59,27 @@ body{
 button{font-family:inherit;color:inherit;background:none;border:none;cursor:pointer}
 button:focus-visible{outline:2px solid var(--accent-3);outline-offset:3px;border-radius:var(--radius-sm)}
 
-/* ============================================================
-   CANVAS 3D
-   ============================================================ */
-#canvas-container{
-  position:fixed; inset:0;
-  touch-action:none;
-  z-index:1;
-}
+#canvas-container{position:fixed; inset:0; touch-action:none; z-index:1}
 #canvas-container canvas{display:block; outline:none}
 
-/* ============================================================
-   HUD SUPERIOR
-   ============================================================ */
+/* HUD TOP */
 .hud-top{
   position:fixed; top:0; left:0; right:0;
   display:grid; grid-template-columns:auto 1fr auto;
   align-items:center; gap:12px;
   padding:calc(10px + var(--safe-top)) 16px 10px;
   z-index:10;
-  background:linear-gradient(to bottom,rgba(0,0,0,.5),transparent);
+  background:linear-gradient(to bottom,rgba(0,0,0,.55),transparent);
   pointer-events:none;
 }
 .hud-top > *{pointer-events:auto}
-
 .hud-actions{display:flex; gap:8px; align-items:center}
 .btn-icon{
-  width:38px; height:38px;
+  width:40px; height:40px;
   border-radius:50%;
   background:var(--surface);
   border:1px solid var(--border);
-  font-size:16px;
+  font-size:17px;
   display:flex; align-items:center; justify-content:center;
   transition:all var(--t-base);
   backdrop-filter:blur(10px);
@@ -126,7 +108,6 @@ button:focus-visible{outline:2px solid var(--accent-3);outline-offset:3px;border
   color:var(--accent-3);
   text-shadow:0 0 12px rgba(125,211,252,.5);
 }
-
 .hud-stats{
   display:flex; gap:14px; font-size:11px;
   justify-content:center;
@@ -135,47 +116,17 @@ button:focus-visible{outline:2px solid var(--accent-3);outline-offset:3px;border
 .hud-stats span{opacity:.7; text-transform:uppercase; letter-spacing:.5px; font-weight:600}
 .hud-stats b{color:var(--accent-3); font-weight:800; font-size:13px}
 
-/* ============================================================
-   TOASTS
-   ============================================================ */
-.toast-container{
-  position:fixed;
-  top:calc(80px + var(--safe-top));
-  left:50%; transform:translateX(-50%);
-  z-index:2000;
-  display:flex; flex-direction:column; gap:6px; align-items:center;
-  pointer-events:none;
-  max-width:90vw;
-}
-.toast{
-  color:#fff; padding:8px 16px;
-  border-radius:var(--radius-full);
-  font-weight:700; font-size:11px;
-  box-shadow:var(--shadow-md);
-  animation:toastIn .3s ease;
-  max-width:90vw; text-align:center;
-  backdrop-filter:blur(10px);
-  -webkit-backdrop-filter:blur(10px);
-}
-.toast.info{background:linear-gradient(135deg,var(--accent-1),var(--accent-2))}
-.toast.warn{background:linear-gradient(135deg,var(--warning),#d97706)}
-.toast.success{background:linear-gradient(135deg,var(--success),#15803d)}
-@keyframes toastIn{from{opacity:0;transform:translateY(-15px)}to{opacity:1;transform:translateY(0)}}
-
-/* ============================================================
-   HINT TAG
-   ============================================================ */
+/* HINT TAG */
 .hint-tag{
   position:fixed;
-  top:calc(66px + var(--safe-top));
+  top:calc(70px + var(--safe-top));
   left:50%; transform:translateX(-50%);
-  padding:8px 16px;
+  padding:10px 18px;
   border-radius:var(--radius-full);
-  background:rgba(125,211,252,.15);
-  border:1px solid rgba(125,211,252,.4);
-  color:var(--accent-3);
-  font-size:11px; font-weight:700;
-  animation:fadeIn .5s ease;
+  background:rgba(251,191,36,.25);
+  border:2px solid rgba(251,191,36,.7);
+  color:#fde68a;
+  font-size:13px; font-weight:800;
   z-index:9;
   backdrop-filter:blur(10px);
   -webkit-backdrop-filter:blur(10px);
@@ -183,36 +134,66 @@ button:focus-visible{outline:2px solid var(--accent-3);outline-offset:3px;border
   pointer-events:none;
   text-align:center;
   max-width:92vw;
+  box-shadow:0 0 30px rgba(251,191,36,.3);
+  animation:fadeIn .5s ease;
 }
 .hint-tag.warn{
-  background:rgba(251,191,36,.15);
-  border-color:rgba(251,191,36,.4);
-  color:var(--warning);
+  background:rgba(251,191,36,.4);
+  border-color:#fbbf24;
+  color:#fffbeb;
+  animation:pulseTag 1s ease-in-out infinite;
+}
+@keyframes pulseTag{
+  0%,100%{transform:translateX(-50%) scale(1)}
+  50%{transform:translateX(-50%) scale(1.05)}
 }
 @keyframes fadeIn{
   from{opacity:0; transform:translate(-50%,-10px)}
   to{opacity:1; transform:translate(-50%,0)}
 }
 
-/* ============================================================
-   HUD INFERIOR
-   ============================================================ */
+/* TOASTS */
+.toast-container{
+  position:fixed;
+  top:calc(120px + var(--safe-top));
+  left:50%; transform:translateX(-50%);
+  z-index:2000;
+  display:flex; flex-direction:column; gap:6px; align-items:center;
+  pointer-events:none;
+  max-width:90vw;
+}
+.toast{
+  color:#fff; padding:10px 18px;
+  border-radius:var(--radius-full);
+  font-weight:700; font-size:12px;
+  box-shadow:var(--shadow-md);
+  animation:toastIn .3s ease;
+  max-width:90vw; text-align:center;
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+}
+.toast.info{background:linear-gradient(135deg,var(--accent-1),var(--accent-2))}
+.toast.warn{background:linear-gradient(135deg,#f59e0b,#d97706)}
+.toast.success{background:linear-gradient(135deg,var(--success),#15803d)}
+@keyframes toastIn{from{opacity:0;transform:translateY(-15px)}to{opacity:1;transform:translateY(0)}}
+
+/* HUD BOTTOM */
 .hud-bottom{
   position:fixed;
   bottom:0; left:0; right:0;
   display:flex; justify-content:center; gap:8px;
   padding:14px 14px calc(14px + var(--safe-bottom));
   z-index:10;
-  background:linear-gradient(to top,rgba(0,0,0,.5),transparent);
+  background:linear-gradient(to top,rgba(0,0,0,.55),transparent);
   flex-wrap:wrap;
 }
 .btn{
-  padding:10px 16px;
+  padding:11px 18px;
   border-radius:var(--radius-full);
   border:1px solid rgba(125,211,252,.3);
   background:var(--btn-bg);
   color:#fff;
-  font-size:12px; font-weight:700;
+  font-size:13px; font-weight:700;
   cursor:pointer;
   transition:all var(--t-base);
   display:inline-flex; align-items:center; gap:6px;
@@ -228,11 +209,8 @@ button:focus-visible{outline:2px solid var(--accent-3);outline-offset:3px;border
   box-shadow:none;
 }
 .btn.secondary:hover:not(:disabled){background:rgba(255,255,255,.15); box-shadow:none}
-.btn:disabled{opacity:.4; cursor:not-allowed; transform:none!important}
 
-/* ============================================================
-   MODAL DE VITÓRIA
-   ============================================================ */
+/* WIN MODAL */
 .win-modal{
   position:fixed; inset:0;
   display:none;
@@ -254,37 +232,20 @@ button:focus-visible{outline:2px solid var(--accent-3);outline-offset:3px;border
   box-shadow:var(--shadow-lg);
   animation:pop .4s cubic-bezier(.34,1.56,.64,1);
 }
-@keyframes pop{
-  from{transform:scale(.8); opacity:0}
-  to{transform:scale(1); opacity:1}
-}
-.win-emoji{font-size:52px; margin-bottom:8px; animation:bounce 1s ease infinite}
-@keyframes bounce{
-  0%,100%{transform:translateY(0)}
-  50%{transform:translateY(-8px)}
-}
-.win-card h2{
-  font-size:22px; color:var(--accent-3);
-  margin:0 0 8px; font-weight:800;
-}
-.win-card p{
-  opacity:.75; font-size:13px;
-  margin:0 0 20px; color:var(--text-muted);
-}
+@keyframes pop{from{transform:scale(.8); opacity:0} to{transform:scale(1); opacity:1}}
+.win-emoji{font-size:56px; margin-bottom:8px; animation:bounce 1s ease infinite}
+@keyframes bounce{0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)}}
+.win-card h2{font-size:24px; color:var(--accent-3); margin:0 0 8px; font-weight:800}
+.win-card p{opacity:.75; font-size:13px; margin:0 0 20px; color:var(--text-muted)}
 .win-stats{
   display:flex; justify-content:space-around;
   padding:14px; background:rgba(125,211,252,.08);
   border-radius:var(--radius-md); margin-bottom:20px;
 }
-.win-stat-value{font-size:20px; font-weight:800; color:var(--accent-3)}
-.win-stat-label{
-  font-size:9px; text-transform:uppercase;
-  color:var(--text-muted); letter-spacing:1px;
-}
+.win-stat-value{font-size:22px; font-weight:800; color:var(--accent-3)}
+.win-stat-label{font-size:9px; text-transform:uppercase; color:var(--text-muted); letter-spacing:1px}
 
-/* ============================================================
-   MENU PRINCIPAL (Seleção de Aviões)
-   ============================================================ */
+/* MENU */
 .main-menu{
   position:fixed; inset:0;
   z-index:50;
@@ -294,36 +255,28 @@ button:focus-visible{outline:2px solid var(--accent-3);outline-offset:3px;border
   overflow-y:auto;
   transition:opacity var(--t-slow), transform var(--t-slow);
 }
-.main-menu.hidden{
-  opacity:0; transform:translateY(-20px);
-  pointer-events:none;
-}
-.menu-header{
-  text-align:center; margin-bottom:24px;
-}
+.main-menu.hidden{opacity:0; transform:translateY(-20px); pointer-events:none}
+.menu-header{text-align:center; margin-bottom:24px}
 .menu-header h1{
-  font-size:28px; margin:0 0 6px;
+  font-size:30px; margin:0 0 6px;
   font-weight:800; letter-spacing:1px;
   background:linear-gradient(135deg,var(--accent-3),var(--accent-1));
   -webkit-background-clip:text;
   background-clip:text;
   -webkit-text-fill-color:transparent;
 }
-.menu-header p{
-  color:var(--text-muted); font-size:12px;
-  margin:0; letter-spacing:.5px;
-}
+.menu-header p{color:var(--text-muted); font-size:13px; margin:0; letter-spacing:.5px}
 .plane-grid{
   display:grid;
-  grid-template-columns:repeat(auto-fill, minmax(150px, 1fr));
+  grid-template-columns:repeat(auto-fill, minmax(160px, 1fr));
   gap:14px;
-  max-width:600px; margin:0 auto; width:100%;
+  max-width:640px; margin:0 auto; width:100%;
 }
 .plane-card{
   background:var(--surface);
   border:1px solid var(--border);
   border-radius:var(--radius-lg);
-  padding:16px 12px;
+  padding:18px 14px;
   text-align:center;
   cursor:pointer;
   transition:all var(--t-base);
@@ -338,33 +291,26 @@ button:focus-visible{outline:2px solid var(--accent-3);outline-offset:3px;border
   border-color:var(--accent-3);
   box-shadow:var(--glow-cyan);
 }
-.plane-card.locked{
-  opacity:.45; cursor:not-allowed;
-}
+.plane-card.locked{opacity:.45; cursor:not-allowed}
 .plane-card.locked::after{
   content:'🔒';
   position:absolute; top:8px; right:8px;
-  font-size:16px;
+  font-size:18px;
 }
 .plane-card.completed::before{
   content:'✓';
   position:absolute; top:8px; left:8px;
-  width:20px; height:20px;
+  width:22px; height:22px;
   border-radius:50%;
   background:var(--success);
-  color:#fff; font-size:12px; font-weight:800;
+  color:#fff; font-size:13px; font-weight:800;
   display:flex; align-items:center; justify-content:center;
 }
-.plane-emoji{font-size:42px; margin-bottom:6px; display:block}
-.plane-name{font-size:12px; font-weight:700; margin-bottom:4px}
-.plane-parts{
-  font-size:9px; text-transform:uppercase;
-  color:var(--text-muted); letter-spacing:1px;
-}
+.plane-emoji{font-size:46px; margin-bottom:6px; display:block}
+.plane-name{font-size:13px; font-weight:700; margin-bottom:4px}
+.plane-parts{font-size:10px; text-transform:uppercase; color:var(--text-muted); letter-spacing:1px}
 
-/* ============================================================
-   LOADING
-   ============================================================ */
+/* LOADING */
 .loading{
   position:fixed; inset:0;
   display:flex; flex-direction:column;
@@ -377,21 +323,39 @@ button:focus-visible{outline:2px solid var(--accent-3);outline-offset:3px;border
 }
 .loading.hidden{opacity:0; pointer-events:none}
 .loading-spinner{
-  width:40px; height:40px;
-  border:3px solid rgba(125,211,252,.2);
+  width:44px; height:44px;
+  border:4px solid rgba(125,211,252,.2);
   border-top-color:var(--accent-3);
   border-radius:50%;
   animation:spin 1s linear infinite;
 }
 @keyframes spin{to{transform:rotate(360deg)}}
+
+/* CONFETTI */
+.confetti-container{
+  position:fixed; inset:0;
+  pointer-events:none;
+  z-index:99;
+  overflow:hidden;
+}
+.confetti-piece{
+  position:absolute;
+  width:10px; height:14px;
+  top:-20px;
+  animation:confettiFall linear forwards;
+}
+@keyframes confettiFall{
+  to{
+    transform:translateY(110vh) rotate(720deg);
+    opacity:0.3;
+  }
+}
 </style>
 </head>
 <body>
 
-<!-- ============ CANVAS 3D ============ -->
 <div id="canvas-container"></div>
 
-<!-- ============ MENU PRINCIPAL ============ -->
 <div class="main-menu" id="main-menu">
   <div class="menu-header">
     <h1>✈️ AIRPLANE BUILDER</h1>
@@ -400,12 +364,11 @@ button:focus-visible{outline:2px solid var(--accent-3);outline-offset:3px;border
   <div class="plane-grid" id="plane-grid"></div>
 </div>
 
-<!-- ============ HUD SUPERIOR ============ -->
 <div class="hud-top" id="hud-top" style="display:none">
   <div class="hud-actions">
-    <button class="btn-icon" id="btn-back" type="button" aria-label="Voltar ao menu" title="Menu">←</button>
-    <button class="btn-icon" id="btn-sound" type="button" aria-label="Alternar som" title="Som">🔊</button>
-    <button class="btn-icon btn-install" id="btn-install" type="button" aria-label="Instalar aplicativo" title="Instalar como app" hidden>⬇️</button>
+    <button class="btn-icon" id="btn-back" type="button" aria-label="Voltar" title="Menu">←</button>
+    <button class="btn-icon" id="btn-sound" type="button" aria-label="Som" title="Som">🔊</button>
+    <button class="btn-icon btn-install" id="btn-install" type="button" aria-label="Instalar" title="Instalar como app" hidden>⬇️</button>
   </div>
   <div>
     <div class="hud-title" id="hud-title">MONTAGEM</div>
@@ -418,18 +381,15 @@ button:focus-visible{outline:2px solid var(--accent-3);outline-offset:3px;border
   <button class="btn-icon" id="btn-restart" type="button" aria-label="Reiniciar" title="Reiniciar">🔄</button>
 </div>
 
-<!-- ============ HINT TAG ============ -->
 <div class="hint-tag" id="hint-tag" style="display:none">
-  🖱️ Arraste as peças até o avião
+  👆 Arraste as peças até o avião
 </div>
 
-<!-- ============ HUD INFERIOR ============ -->
 <div class="hud-bottom" id="hud-bottom" style="display:none">
   <button class="btn secondary" id="btn-hint" type="button">💡 Dica</button>
   <button class="btn secondary" id="btn-reset-parts" type="button">↶ Reorganizar</button>
 </div>
 
-<!-- ============ MODAL DE VITÓRIA ============ -->
 <div class="win-modal" id="win-modal">
   <div class="win-card">
     <div class="win-emoji">🎉</div>
@@ -443,16 +403,15 @@ button:focus-visible{outline:2px solid var(--accent-3);outline-offset:3px;border
   </div>
 </div>
 
-<!-- ============ TOASTS ============ -->
 <div class="toast-container" id="toast-container" aria-live="polite"></div>
 
-<!-- ============ LOADING ============ -->
 <div class="loading" id="loading">
   <div class="loading-spinner"></div>
   <div>Carregando Three.js...</div>
 </div>
 
-<!-- ============ THREE.JS ============ -->
+<div class="confetti-container" id="confetti-container"></div>
+
 <script type="importmap">
 {
   "imports": {
@@ -470,19 +429,23 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
    CONFIG
    ============================================================ */
 const CONFIG = Object.freeze({
-  TOAST_DURATION: 2200,
+  TOAST_DURATION: 2500,
   TOAST_SAFETY: 5000,
-  SNAP_DISTANCE: 1.2,
-  SNAP_ANIM_MS: 250,
-  RETURN_ANIM_MS: 300,
+  SNAP_DISTANCE: 2.8,
+  SNAP_ANIM_MS: 350,
+  RETURN_ANIM_MS: 350,
+  PICKUP_SCALE: 1.4,
+  HOVER_SCALE: 1.15,
+  HINT_TIMEOUT_MS: 8000,
   STORAGE_KEYS: Object.freeze({
     SOUND: 'airplane.sound',
+    VOICE: 'airplane.voice',
     COMPLETED: 'airplane.completed'
   })
 });
 
 /* ============================================================
-   AVIAÇÕES (cada uma é um puzzle)
+   AVIAÇÕES — cores primárias vivas
    ============================================================ */
 const AIRPLANES = [
   {
@@ -491,11 +454,11 @@ const AIRPLANES = [
     emoji: '📄',
     difficulty: 1,
     parts: [
-      { id:'fuselage', name:'Fuselagem', color:0xe2e8f0, geo:['cylinder',[0.4,0.4,3.5,16]], slot:{pos:[0,0.5,0], rot:[0,0,Math.PI/2]} },
-      { id:'wing', name:'Asa', color:0x3b82f6, geo:['box',[4,0.1,0.9]], slot:{pos:[0,0.5,0], rot:[0,0,0]} },
-      { id:'tail', name:'Cauda', color:0x1e40af, geo:['box',[1.2,0.1,0.6]], slot:{pos:[-1.6,0.5,0], rot:[0,0,0]} },
-      { id:'fin', name:'Estabilizador', color:0x1e40af, geo:['box',[0.7,0.7,0.1]], slot:{pos:[-1.7,0.9,0], rot:[0,0,0]} },
-      { id:'propeller', name:'Hélice', color:0xfbbf24, geo:['cone',[0.35,0.6,8]], slot:{pos:[2.1,0.5,0], rot:[0,0,-Math.PI/2]} }
+      { id:'fuselage', name:'fuselagem azul', color:0x38bdf8, geo:['cylinder',[0.5,0.5,3.5,16]], slot:{pos:[0,0.6,0], rot:[0,0,Math.PI/2]} },
+      { id:'wing', name:'asa vermelha', color:0xf43f5e, geo:['box',[4.5,0.15,1]], slot:{pos:[0,0.6,0], rot:[0,0,0]} },
+      { id:'tail', name:'cauda amarela', color:0xfacc15, geo:['box',[1.4,0.15,0.7]], slot:{pos:[-1.6,0.6,0], rot:[0,0,0]} },
+      { id:'fin', name:'estabilizador roxo', color:0xa855f7, geo:['box',[0.8,0.8,0.15]], slot:{pos:[-1.7,1.05,0], rot:[0,0,0]} },
+      { id:'propeller', name:'hélice verde', color:0x22c55e, geo:['cone',[0.4,0.7,8]], slot:{pos:[2.1,0.6,0], rot:[0,0,-Math.PI/2]} }
     ]
   },
   {
@@ -504,14 +467,14 @@ const AIRPLANES = [
     emoji: '🛩️',
     difficulty: 2,
     parts: [
-      { id:'fuselage', name:'Fuselagem', color:0x64748b, geo:['cylinder',[0.35,0.5,3.8,16]], slot:{pos:[0,0.5,0], rot:[0,0,Math.PI/2]} },
-      { id:'cockpit', name:'Cockpit', color:0x0ea5e9, geo:['sphere',[0.3,12,12]], slot:{pos:[0.6,0.75,0], rot:[0,0,0]} },
-      { id:'wing', name:'Asa Principal', color:0x334155, geo:['box',[4.5,0.08,1.1]], slot:{pos:[0,0.5,0], rot:[0,0,0]} },
-      { id:'wing-back', name:'Asa Traseira', color:0x334155, geo:['box',[2,0.08,0.6]], slot:{pos:[-1.5,0.5,0], rot:[0,0,0]} },
-      { id:'fin', name:'Fin', color:0x334155, geo:['box',[0.7,0.9,0.08]], slot:{pos:[-1.7,1,0], rot:[0,0,0]} },
-      { id:'nose', name:'Bico', color:0xef4444, geo:['cone',[0.35,0.7,16]], slot:{pos:[2,0.5,0], rot:[0,0,-Math.PI/2]} },
-      { id:'engine1', name:'Motor Esq.', color:0xf97316, geo:['cylinder',[0.18,0.18,0.6,12]], slot:{pos:[0.2,0.3,-0.7], rot:[0,0,Math.PI/2]} },
-      { id:'engine2', name:'Motor Dir.', color:0xf97316, geo:['cylinder',[0.18,0.18,0.6,12]], slot:{pos:[0.2,0.3,0.7], rot:[0,0,Math.PI/2]} }
+      { id:'fuselage', name:'fuselagem azul', color:0x0ea5e9, geo:['cylinder',[0.45,0.6,3.8,16]], slot:{pos:[0,0.6,0], rot:[0,0,Math.PI/2]} },
+      { id:'cockpit', name:'cockpit amarelo', color:0xfbbf24, geo:['sphere',[0.35,12,12]], slot:{pos:[0.6,0.9,0], rot:[0,0,0]} },
+      { id:'wing', name:'asa vermelha', color:0xef4444, geo:['box',[5,0.15,1.2]], slot:{pos:[0,0.6,0], rot:[0,0,0]} },
+      { id:'wing-back', name:'asa traseira vermelha', color:0xef4444, geo:['box',[2.2,0.15,0.7]], slot:{pos:[-1.5,0.6,0], rot:[0,0,0]} },
+      { id:'fin', name:'leme roxo', color:0xa855f7, geo:['box',[0.8,1,0.15]], slot:{pos:[-1.7,1.15,0], rot:[0,0,0]} },
+      { id:'nose', name:'bico verde', color:0x22c55e, geo:['cone',[0.45,0.8,16]], slot:{pos:[2,0.6,0], rot:[0,0,-Math.PI/2]} },
+      { id:'engine1', name:'motor laranja esquerdo', color:0xf97316, geo:['cylinder',[0.22,0.22,0.7,12]], slot:{pos:[0.2,0.35,-0.85], rot:[0,0,Math.PI/2]} },
+      { id:'engine2', name:'motor laranja direito', color:0xf97316, geo:['cylinder',[0.22,0.22,0.7,12]], slot:{pos:[0.2,0.35,0.85], rot:[0,0,Math.PI/2]} }
     ]
   },
   {
@@ -520,12 +483,12 @@ const AIRPLANES = [
     emoji: '🛫',
     difficulty: 3,
     parts: [
-      { id:'fuselage', name:'Fuselagem', color:0xd97706, geo:['cylinder',[0.4,0.4,3.2,16]], slot:{pos:[0,0.5,0], rot:[0,0,Math.PI/2]} },
-      { id:'wing-top', name:'Asa Superior', color:0xfbbf24, geo:['box',[4,0.1,0.9]], slot:{pos:[0,0.95,0], rot:[0,0,0]} },
-      { id:'wing-bottom', name:'Asa Inferior', color:0xfbbf24, geo:['box',[4,0.1,0.9]], slot:{pos:[0,0.15,0], rot:[0,0,0]} },
-      { id:'pillar1', name:'Pilar Esq.', color:0x78350f, geo:['box',[0.05,0.7,0.05]], slot:{pos:[0,0.55,-0.4], rot:[0,0,0]} },
-      { id:'pillar2', name:'Pilar Dir.', color:0x78350f, geo:['box',[0.05,0.7,0.05]], slot:{pos:[0,0.55,0.4], rot:[0,0,0]} },
-      { id:'propeller', name:'Hélice', color:0x0f172a, geo:['box',[0.08,1,0.1]], slot:{pos:[1.8,0.5,0], rot:[0,0,0]} }
+      { id:'fuselage', name:'fuselagem laranja', color:0xf59e0b, geo:['cylinder',[0.5,0.5,3.2,16]], slot:{pos:[0,0.6,0], rot:[0,0,Math.PI/2]} },
+      { id:'wing-top', name:'asa superior amarela', color:0xfacc15, geo:['box',[4.5,0.15,1]], slot:{pos:[0,1.15,0], rot:[0,0,0]} },
+      { id:'wing-bottom', name:'asa inferior amarela', color:0xfacc15, geo:['box',[4.5,0.15,1]], slot:{pos:[0,0.25,0], rot:[0,0,0]} },
+      { id:'pillar1', name:'pilar vermelho esquerdo', color:0xdc2626, geo:['box',[0.08,0.8,0.08]], slot:{pos:[0,0.7,-0.45], rot:[0,0,0]} },
+      { id:'pillar2', name:'pilar vermelho direito', color:0xdc2626, geo:['box',[0.08,0.8,0.08]], slot:{pos:[0,0.7,0.45], rot:[0,0,0]} },
+      { id:'propeller', name:'hélice verde', color:0x22c55e, geo:['box',[0.12,1.2,0.15]], slot:{pos:[1.8,0.6,0], rot:[0,0,0]} }
     ]
   },
   {
@@ -534,14 +497,14 @@ const AIRPLANES = [
     emoji: '✈️',
     difficulty: 4,
     parts: [
-      { id:'fuselage', name:'Fuselagem', color:0xf1f5f9, geo:['cylinder',[0.5,0.5,5,16]], slot:{pos:[0,0.5,0], rot:[0,0,Math.PI/2]} },
-      { id:'wing-left', name:'Asa Esquerda', color:0x1e40af, geo:['box',[2.2,0.1,1.2]], slot:{pos:[-0.2,0.35,-1.5], rot:[0,0.3,0]} },
-      { id:'wing-right', name:'Asa Direita', color:0x1e40af, geo:['box',[2.2,0.1,1.2]], slot:{pos:[-0.2,0.35,1.5], rot:[0,-0.3,0]} },
-      { id:'tail-wing', name:'Estab. Traseiro', color:0x1e40af, geo:['box',[1.5,0.08,1]], slot:{pos:[-2.2,0.5,0], rot:[0,0,0]} },
-      { id:'fin', name:'Fin Vertical', color:0x1e40af, geo:['box',[0.8,1.2,0.1]], slot:{pos:[-2.3,1.1,0], rot:[0,0,0]} },
-      { id:'engine-l', name:'Motor Esq.', color:0x475569, geo:['cylinder',[0.3,0.3,1,12]], slot:{pos:[0.2,0.15,-1.8], rot:[0,0,Math.PI/2]} },
-      { id:'engine-r', name:'Motor Dir.', color:0x475569, geo:['cylinder',[0.3,0.3,1,12]], slot:{pos:[0.2,0.15,1.8], rot:[0,0,Math.PI/2]} },
-      { id:'nose', name:'Nariz', color:0x0ea5e9, geo:['cone',[0.5,0.6,16]], slot:{pos:[2.7,0.5,0], rot:[0,0,-Math.PI/2]} }
+      { id:'fuselage', name:'fuselagem azul', color:0x38bdf8, geo:['cylinder',[0.55,0.55,5,16]], slot:{pos:[0,0.7,0], rot:[0,0,Math.PI/2]} },
+      { id:'wing-left', name:'asa esquerda vermelha', color:0xef4444, geo:['box',[2.4,0.15,1.3]], slot:{pos:[-0.2,0.45,-1.6], rot:[0,0.3,0]} },
+      { id:'wing-right', name:'asa direita vermelha', color:0xef4444, geo:['box',[2.4,0.15,1.3]], slot:{pos:[-0.2,0.45,1.6], rot:[0,-0.3,0]} },
+      { id:'tail-wing', name:'estabilizador laranja', color:0xf59e0b, geo:['box',[1.6,0.12,1.1]], slot:{pos:[-2.2,0.7,0], rot:[0,0,0]} },
+      { id:'fin', name:'leme rosa', color:0xf43f5e, geo:['box',[0.9,1.3,0.15]], slot:{pos:[-2.3,1.35,0], rot:[0,0,0]} },
+      { id:'engine-l', name:'motor verde esquerdo', color:0x22c55e, geo:['cylinder',[0.35,0.35,1.1,12]], slot:{pos:[0.2,0.2,-1.9], rot:[0,0,Math.PI/2]} },
+      { id:'engine-r', name:'motor verde direito', color:0x22c55e, geo:['cylinder',[0.35,0.35,1.1,12]], slot:{pos:[0.2,0.2,1.9], rot:[0,0,Math.PI/2]} },
+      { id:'nose', name:'nariz roxo', color:0xa855f7, geo:['cone',[0.55,0.7,16]], slot:{pos:[2.7,0.7,0], rot:[0,0,-Math.PI/2]} }
     ]
   }
 ];
@@ -601,33 +564,145 @@ const Sound = (() => {
   return {
     isEnabled: () => enabled,
     toggle() { enabled = !enabled; Storage.set(CONFIG.STORAGE_KEYS.SOUND, enabled?'1':'0'); if(enabled) tone(880,'sine',.1,.1); return enabled; },
-    pickup: () => tone(500, 'sine', .08, .05),
-    snap:   () => tone(720, 'triangle', .12, .09),
-    wrong:  () => tone(180, 'sawtooth', .15, .06),
+    pickup: () => { tone(500, 'sine', .06, .04); tone(750, 'sine', .08, .04); },
+    snap:   () => { tone(720, 'triangle', .1, .08); tone(1080, 'sine', .15, .06); },
+    wrong:  () => tone(220, 'sine', .12, .05),
     win()   {
       if (!enabled) return;
       const ac = ensure(); if (!ac) return;
       const now = ac.currentTime;
-      [523, 659, 784, 1046].forEach((f,i) => {
+      [523, 659, 784, 1046, 1318].forEach((f,i) => {
         const o = ac.createOscillator(); const g = ac.createGain();
         o.frequency.value = f; o.type = 'sine';
-        const t = now + i * .1;
+        const t = now + i * .09;
         g.gain.setValueAtTime(.001, t);
         g.gain.exponentialRampToValueAtTime(.12, t + .02);
-        g.gain.exponentialRampToValueAtTime(.001, t + .35);
+        g.gain.exponentialRampToValueAtTime(.001, t + .4);
         o.connect(g); g.connect(ac.destination);
-        o.start(t); o.stop(t + .35);
+        o.start(t); o.stop(t + .4);
       });
     }
   };
 })();
+
+/* Voz em pt-BR */
+const Voice = (() => {
+  let enabled = Storage.get(CONFIG.STORAGE_KEYS.VOICE, '1') === '1';
+  let voice = null;
+  let ready = false;
+
+  const loadVoices = () => {
+    if (!('speechSynthesis' in window)) return;
+    const voices = speechSynthesis.getVoices();
+    voice = voices.find(v => v.lang.startsWith('pt-BR'))
+         || voices.find(v => v.lang.startsWith('pt'))
+         || voices[0];
+    ready = true;
+  };
+
+  if ('speechSynthesis' in window) {
+    loadVoices();
+    speechSynthesis.onvoiceschanged = loadVoices;
+  }
+
+  return {
+    isEnabled: () => enabled && ready && 'speechSynthesis' in window,
+    toggle() {
+      enabled = !enabled;
+      Storage.set(CONFIG.STORAGE_KEYS.VOICE, enabled ? '1' : '0');
+      return enabled;
+    },
+    speak(text) {
+      if (!enabled || !ready || !('speechSynthesis' in window)) return;
+      try {
+        speechSynthesis.cancel();
+        const utter = new SpeechSynthesisUtterance(text);
+        utter.lang = 'pt-BR';
+        utter.voice = voice;
+        utter.rate = 0.95;
+        utter.pitch = 1.15;
+        utter.volume = 0.9;
+        speechSynthesis.speak(utter);
+      } catch (err) { /* silencioso */ }
+    }
+  };
+})();
+
+/* Confete */
+const Confetti = (() => {
+  const container = document.getElementById('confetti-container');
+  const colors = ['#f43f5e','#38bdf8','#facc15','#22c55e','#a855f7','#f97316','#ec4899'];
+
+  const burst = (count = 80) => {
+    for (let i = 0; i < count; i++) {
+      const piece = document.createElement('div');
+      piece.className = 'confetti-piece';
+      piece.style.left = Math.random() * 100 + '%';
+      piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+      piece.style.animationDuration = (2 + Math.random() * 2) + 's';
+      piece.style.animationDelay = (Math.random() * 0.5) + 's';
+      piece.style.transform = `rotate(${Math.random() * 360}deg)`;
+      if (Math.random() > 0.5) piece.style.borderRadius = '50%';
+      container.appendChild(piece);
+      setTimeout(() => piece.remove(), 5000);
+    }
+  };
+
+  return { burst };
+})();
+
+/* Partículas 3D — estrelinhas ao encaixar */
+const createStarBurst = (scene, position, color) => {
+  const particles = [];
+  const count = 12;
+  const geo = new THREE.SphereGeometry(0.08, 6, 6);
+
+  for (let i = 0; i < count; i++) {
+    const mat = new THREE.MeshBasicMaterial({ color });
+    const star = new THREE.Mesh(geo, mat);
+    star.position.copy(position);
+
+    const angle = (i / count) * Math.PI * 2;
+    const speed = 0.15 + Math.random() * 0.1;
+    star.userData.velocity = new THREE.Vector3(
+      Math.cos(angle) * speed,
+      0.15 + Math.random() * 0.15,
+      Math.sin(angle) * speed
+    );
+    star.userData.life = 1.0;
+
+    scene.add(star);
+    particles.push(star);
+  }
+
+  const t0 = performance.now();
+  const animateParticles = () => {
+    const t = (performance.now() - t0) / 1000;
+    let alive = false;
+
+    for (const p of particles) {
+      if (p.userData.life <= 0) continue;
+      alive = true;
+      p.position.add(p.userData.velocity);
+      p.userData.velocity.y -= 0.015;
+      p.userData.life -= 0.02;
+      p.material.opacity = Math.max(0, p.userData.life);
+      p.material.transparent = true;
+      p.scale.setScalar(Math.max(0.01, p.userData.life));
+    }
+
+    if (alive) requestAnimationFrame(animateParticles);
+    else particles.forEach(p => scene.remove(p));
+  };
+  animateParticles();
+};
 
 /* ============================================================
    THREE.JS — SETUP
    ============================================================ */
 const container = document.getElementById('canvas-container');
 const scene = new THREE.Scene();
-scene.fog = new THREE.Fog(0x0a1628, 14, 30);
+scene.fog = new THREE.Fog(0x0a1628, 16, 34);
 
 const camera = new THREE.PerspectiveCamera(50, window.innerWidth/window.innerHeight, 0.1, 100);
 camera.position.set(6, 5, 8);
@@ -645,12 +720,11 @@ controls.dampingFactor = 0.08;
 controls.minDistance = 4;
 controls.maxDistance = 18;
 controls.maxPolarAngle = Math.PI / 2.1;
-controls.target.set(0, 0.5, 0);
+controls.target.set(0, 0.6, 0);
 
-/* Iluminação */
-scene.add(new THREE.AmbientLight(0xffffff, 0.5));
+scene.add(new THREE.AmbientLight(0xffffff, 0.65));
 
-const keyLight = new THREE.DirectionalLight(0xffffff, 1.2);
+const keyLight = new THREE.DirectionalLight(0xffffff, 1.3);
 keyLight.position.set(5, 10, 7);
 keyLight.castShadow = true;
 keyLight.shadow.mapSize.set(2048, 2048);
@@ -660,17 +734,20 @@ keyLight.shadow.camera.top = 10;
 keyLight.shadow.camera.bottom = -10;
 scene.add(keyLight);
 
-const fillLight = new THREE.DirectionalLight(0x7dd3fc, 0.4);
+const fillLight = new THREE.DirectionalLight(0x7dd3fc, 0.5);
 fillLight.position.set(-6, 3, -5);
 scene.add(fillLight);
 
-/* Grid */
-const grid = new THREE.GridHelper(24, 48, 0x334155, 0x1e293b);
+const rimLight = new THREE.DirectionalLight(0xfbbf24, 0.35);
+rimLight.position.set(0, -2, -8);
+scene.add(rimLight);
+
+const grid = new THREE.GridHelper(24, 48, 0x3b82f6, 0x1e3a5f);
 grid.position.y = -0.5;
 scene.add(grid);
 
 /* ============================================================
-   GAME STATE
+   ESTADO
    ============================================================ */
 const state = {
   currentPlane: null,
@@ -679,14 +756,14 @@ const state = {
   moves: 0,
   startTime: 0,
   timerInterval: null,
-  meshes: new Map(),      // partId → mesh
-  slots: new Map(),       // partId → ghost mesh
-  draggable: [],          // lista de mesh arrastáveis
+  meshes: new Map(),
+  slots: new Map(),
+  draggable: [],
   completedPlanes: Storage.getJSON(CONFIG.STORAGE_KEYS.COMPLETED, []) || []
 };
 
 /* ============================================================
-   BUILD GEOMETRY
+   GEOMETRIA
    ============================================================ */
 const buildGeometry = (geoDef) => {
   const [type, params] = geoDef;
@@ -722,37 +799,45 @@ const loadPlane = (planeId) => {
   state.startTime = Date.now();
   state.totalParts = plane.parts.length;
 
-  /* Cria ghost slots (marcadores) */
+  /* Ghosts dourados pulsantes */
   plane.parts.forEach(part => {
     const geo = buildGeometry(part.geo);
     const mat = new THREE.MeshBasicMaterial({
-      color: 0x7dd3fc, transparent: true, opacity: 0.12, wireframe: true
+      color: 0xfbbf24,
+      transparent: true,
+      opacity: 0.35,
+      wireframe: true
     });
     const ghost = new THREE.Mesh(geo, mat);
     ghost.position.set(...part.slot.pos);
     ghost.rotation.set(...part.slot.rot);
+    ghost.userData.isGhost = true;
     scene.add(ghost);
     state.slots.set(part.id, ghost);
   });
 
-  /* Cria peças arrastáveis */
+  /* Peças arrastáveis — cores vivas e brilho sutil */
   plane.parts.forEach((part, i) => {
     const geo = buildGeometry(part.geo);
     const mat = new THREE.MeshStandardMaterial({
-      color: part.color, metalness: 0.35, roughness: 0.5
+      color: part.color,
+      metalness: 0.15,
+      roughness: 0.4,
+      emissive: part.color,
+      emissiveIntensity: 0.15
     });
     const mesh = new THREE.Mesh(geo, mat);
     mesh.castShadow = true;
     mesh.receiveShadow = true;
     mesh.userData.partId = part.id;
 
-    /* Posição inicial espalhada em arco */
+    /* Posição inicial em arco — espaçamento generoso */
     const angle = (i / plane.parts.length) * Math.PI - Math.PI/2;
-    const radius = 5.5;
+    const radius = 6;
     mesh.position.set(
-      Math.cos(angle) * radius * 1.2,
+      Math.cos(angle) * radius * 1.3,
       -0.3,
-      Math.sin(angle) * radius * 0.6 + 4.5
+      Math.sin(angle) * radius * 0.7 + 5
     );
     mesh.rotation.set(
       Math.random()*0.4 - 0.2,
@@ -766,12 +851,12 @@ const loadPlane = (planeId) => {
     state.draggable.push(mesh);
   });
 
-  /* Ajusta câmera conforme dificuldade */
-  const dist = 7 + plane.parts.length * 0.15;
+  const dist = 7.5 + plane.parts.length * 0.15;
   camera.position.set(dist * 0.7, dist * 0.55, dist);
-  controls.target.set(0, 0.5, 0);
+  controls.target.set(0, 0.6, 0);
 
   updateHUD();
+  Voice.speak(`Vamos montar o ${plane.name}!`);
 };
 
 /* ============================================================
@@ -783,17 +868,20 @@ const dragPlane = new THREE.Plane(new THREE.Vector3(0,1,0), 0);
 const dragOffset = new THREE.Vector3();
 const intersectPoint = new THREE.Vector3();
 let draggingObject = null;
+let hoveredObject = null;
 
 const updatePointer = (e) => {
-  const x = e.clientX;
-  const y = e.clientY;
-  pointer.x = (x / window.innerWidth) * 2 - 1;
-  pointer.y = -(y / window.innerHeight) * 2 + 1;
+  pointer.x = (e.clientX / window.innerWidth) * 2 - 1;
+  pointer.y = -(e.clientY / window.innerHeight) * 2 + 1;
 };
 
 const onPointerDown = (e) => {
   if (e.target !== renderer.domElement) return;
   if (document.getElementById('main-menu').offsetParent !== null) return;
+
+  resetIdleTimer();
+  clearTimeout(hintTimeout);
+
   updatePointer(e);
   raycaster.setFromCamera(pointer, camera);
 
@@ -808,6 +896,7 @@ const onPointerDown = (e) => {
 
   controls.enabled = false;
   Sound.pickup();
+  Voice.speak(`Pegou a ${draggingObject.userData.partId}.`);
 
   dragPlane.setFromNormalAndCoplanarPoint(
     new THREE.Vector3(0,1,0), draggingObject.position
@@ -815,13 +904,13 @@ const onPointerDown = (e) => {
   raycaster.ray.intersectPlane(dragPlane, intersectPoint);
   dragOffset.copy(draggingObject.position).sub(intersectPoint);
 
-  /* Animação de escala */
+  /* Escala ao pegar */
   draggingObject.userData._scale = 1;
   const scaleUp = () => {
     if (!draggingObject) return;
-    draggingObject.userData._scale = Math.min(1.15, draggingObject.userData._scale + 0.03);
+    draggingObject.userData._scale = Math.min(CONFIG.PICKUP_SCALE, draggingObject.userData._scale + 0.05);
     draggingObject.scale.setScalar(draggingObject.userData._scale);
-    if (draggingObject.userData._scale < 1.15) requestAnimationFrame(scaleUp);
+    if (draggingObject.userData._scale < CONFIG.PICKUP_SCALE) requestAnimationFrame(scaleUp);
   };
   scaleUp();
 
@@ -840,11 +929,10 @@ const onPointerMove = (e) => {
 const onPointerUp = () => {
   if (!draggingObject) return;
 
-  /* Restaura escala */
-  draggingObject.userData._scale = 1.15;
+  draggingObject.userData._scale = CONFIG.PICKUP_SCALE;
   const scaleDown = () => {
     if (!draggingObject) return;
-    draggingObject.userData._scale = Math.max(1, draggingObject.userData._scale - 0.03);
+    draggingObject.userData._scale = Math.max(1, draggingObject.userData._scale - 0.05);
     draggingObject.scale.setScalar(draggingObject.userData._scale);
     if (draggingObject.userData._scale > 1) requestAnimationFrame(scaleDown);
     else draggingObject.scale.setScalar(1);
@@ -867,6 +955,7 @@ const onPointerUp = () => {
 
   draggingObject = null;
   controls.enabled = true;
+  resetIdleTimer();
 };
 
 const snapToSlot = (mesh, part, slot) => {
@@ -886,24 +975,33 @@ const snapToSlot = (mesh, part, slot) => {
     mesh.rotation.z = startRot.z + (targetRot.z - startRot.z) * ease;
 
     if (t < 1) requestAnimationFrame(animate);
-    else onSnapped(mesh, slot);
+    else onSnapped(mesh, slot, part);
   };
   animate();
 };
 
-const onSnapped = (mesh, slot) => {
+const onSnapped = (mesh, slot, part) => {
   slot.visible = false;
+
+  /* Brilho verde temporário */
   mesh.material.emissive = new THREE.Color(0x4ade80);
-  mesh.material.emissiveIntensity = 0.35;
-  setTimeout(() => { mesh.material.emissiveIntensity = 0; }, 600);
+  mesh.material.emissiveIntensity = 0.7;
+  setTimeout(() => {
+    mesh.material.emissive = new THREE.Color(part.color);
+    mesh.material.emissiveIntensity = 0.15;
+  }, 500);
+
+  /* Partículas de estrelinhas */
+  createStarBurst(scene, slot.position.clone(), part.color);
 
   state.placedParts.add(mesh.userData.partId);
   state.moves++;
   Sound.snap();
+  Voice.speak(`Boa! ${part.name} encaixada.`);
   updateHUD();
 
   if (state.placedParts.size === state.totalParts) {
-    setTimeout(onWin, 500);
+    setTimeout(onWin, 600);
   }
 };
 
@@ -911,17 +1009,50 @@ const returnToOrigin = (mesh) => {
   const origin = mesh.userData.originPosition.clone();
   const startPos = mesh.position.clone();
   const t0 = performance.now();
+  const shakeAxis = Math.random() > 0.5 ? 1 : -1;
+
   const animate = () => {
     const t = Math.min((performance.now() - t0) / CONFIG.RETURN_ANIM_MS, 1);
     const ease = 1 - Math.pow(1 - t, 3);
     mesh.position.lerpVectors(startPos, origin, ease);
+    if (t < 0.4) {
+      mesh.position.x += Math.sin(t * 30) * 0.15 * shakeAxis * (1 - t);
+    }
     if (t < 1) requestAnimationFrame(animate);
   };
   animate();
 };
 
-/* Eventos de ponteiro */
+/* Hover */
+const onPointerHover = (e) => {
+  if (draggingObject) return;
+  if (document.getElementById('main-menu').offsetParent !== null) return;
+
+  updatePointer(e);
+  raycaster.setFromCamera(pointer, camera);
+  const hits = raycaster.intersectObjects(state.draggable, false);
+
+  if (hits.length > 0) {
+    const obj = hits[0].object;
+    if (state.placedParts.has(obj.userData.partId)) return;
+    if (obj !== hoveredObject) {
+      if (hoveredObject) hoveredObject.scale.setScalar(1);
+      hoveredObject = obj;
+      renderer.domElement.style.cursor = 'grab';
+    }
+    const target = CONFIG.HOVER_SCALE;
+    if (obj.scale.x < target) obj.scale.setScalar(Math.min(target, obj.scale.x + 0.05));
+  } else {
+    if (hoveredObject) {
+      hoveredObject.scale.setScalar(1);
+      hoveredObject = null;
+      renderer.domElement.style.cursor = '';
+    }
+  }
+};
+
 renderer.domElement.addEventListener('pointerdown', onPointerDown);
+renderer.domElement.addEventListener('pointermove', onPointerHover);
 window.addEventListener('pointermove', onPointerMove);
 window.addEventListener('pointerup', onPointerUp);
 window.addEventListener('pointercancel', onPointerUp);
@@ -953,6 +1084,8 @@ const startTimer = () => {
 const onWin = () => {
   clearInterval(state.timerInterval);
   Sound.win();
+  Confetti.burst(120);
+  Voice.speak(`Parabéns! Você montou o ${state.currentPlane.name}!`);
 
   const planeId = state.currentPlane.id;
   if (!state.completedPlanes.includes(planeId)) {
@@ -965,11 +1098,10 @@ const onWin = () => {
   $('win-time').textContent = `${secs}s`;
   $('win-modal').classList.add('active');
 
-  /* Rotação comemorativa */
   const t0 = performance.now();
   const celebrate = () => {
     const t = (performance.now() - t0) / 1000;
-    for (const m of state.meshes.values()) m.rotation.y += 0.025;
+    for (const m of state.meshes.values()) m.rotation.y += 0.02;
     if (t < 3) requestAnimationFrame(celebrate);
   };
   celebrate();
@@ -983,7 +1115,6 @@ const renderMenu = () => {
   grid.replaceChildren();
   AIRPLANES.forEach(plane => {
     const completed = state.completedPlanes.includes(plane.id);
-    /* Desbloqueio: primeira sempre livre, demais requerem anterior completo */
     const idx = AIRPLANES.indexOf(plane);
     const locked = idx > 0 && !state.completedPlanes.includes(AIRPLANES[idx-1].id);
 
@@ -1020,7 +1151,6 @@ const startPlane = (planeId) => {
   $('hud-title').textContent = AIRPLANES.find(p=>p.id===planeId).name.toUpperCase();
   loadPlane(planeId);
   startTimer();
-  Toaster.info(`✈️ ${state.currentPlane.name}`);
 };
 
 const backToMenu = () => {
@@ -1038,15 +1168,16 @@ const backToMenu = () => {
    BOTÕES
    ============================================================ */
 $('btn-back').addEventListener('click', backToMenu);
+
 $('btn-restart').addEventListener('click', () => {
   if (!state.currentPlane) return;
   loadPlane(state.currentPlane.id);
   startTimer();
   Toaster.info('🔄 Reiniciado');
 });
+
 $('btn-reset-parts').addEventListener('click', () => {
   if (!state.currentPlane) return;
-  /* Reorganiza apenas peças não colocadas */
   let i = 0;
   const plane = state.currentPlane;
   plane.parts.forEach(part => {
@@ -1054,11 +1185,11 @@ $('btn-reset-parts').addEventListener('click', () => {
     const mesh = state.meshes.get(part.id);
     if (!mesh) return;
     const angle = (i / plane.parts.length) * Math.PI - Math.PI/2;
-    const radius = 5.5;
+    const radius = 6;
     mesh.position.set(
-      Math.cos(angle) * radius * 1.2,
+      Math.cos(angle) * radius * 1.3,
       -0.3,
-      Math.sin(angle) * radius * 0.6 + 4.5
+      Math.sin(angle) * radius * 0.7 + 5
     );
     mesh.rotation.set(0, Math.random()*Math.PI*2, 0);
     mesh.userData.originPosition = mesh.position.clone();
@@ -1066,15 +1197,11 @@ $('btn-reset-parts').addEventListener('click', () => {
   });
   Toaster.info('↶ Peças reorganizadas');
 });
+
 $('btn-hint').addEventListener('click', () => {
-  const hint = $('hint-tag');
-  hint.classList.add('warn');
-  hint.textContent = '💡 Arraste cada peça até o contorno azul';
-  setTimeout(() => {
-    hint.classList.remove('warn');
-    hint.textContent = '🖱️ Arraste as peças até o avião';
-  }, 3000);
+  showAutoHint();
 });
+
 $('btn-next-plane').addEventListener('click', () => {
   const idx = AIRPLANES.indexOf(state.currentPlane);
   const next = AIRPLANES[idx + 1];
@@ -1086,10 +1213,11 @@ $('btn-next-plane').addEventListener('click', () => {
     backToMenu();
   }
 });
+
 $('btn-sound').addEventListener('click', () => {
   const on = Sound.toggle();
   $('btn-sound').textContent = on ? '🔊' : '🔇';
-  Toaster.info(on ? 'Som ativado' : 'Som desativado');
+  Toaster.info(on ? 'Som ligado' : 'Som desligado');
 });
 
 /* ============================================================
@@ -1102,6 +1230,67 @@ window.addEventListener('resize', () => {
 });
 
 /* ============================================================
+   AUTO-DICA
+   ============================================================ */
+let lastInteraction = Date.now();
+let hintTimeout = null;
+
+const resetIdleTimer = () => {
+  lastInteraction = Date.now();
+  clearTimeout(hintTimeout);
+  hintTimeout = setTimeout(showAutoHint, CONFIG.HINT_TIMEOUT_MS);
+};
+
+const showAutoHint = () => {
+  if (!state.currentPlane) return;
+  if (state.placedParts.size >= state.totalParts) return;
+
+  const remaining = state.currentPlane.parts.filter(p => !state.placedParts.has(p.id));
+  if (remaining.length === 0) return;
+
+  const pick = remaining[0];
+  const mesh = state.meshes.get(pick.id);
+  const slot = state.slots.get(pick.id);
+  if (!mesh || !slot) return;
+
+  /* Brilha a peça */
+  mesh.material.emissive = new THREE.Color(0xffffff);
+  const t0 = performance.now();
+  const pulse = () => {
+    const t = (performance.now() - t0) / 1000;
+    if (t > 2.5) {
+      mesh.material.emissive = new THREE.Color(pick.color);
+      mesh.material.emissiveIntensity = 0.15;
+      return;
+    }
+    mesh.material.emissiveIntensity = 0.3 + Math.sin(t * 12) * 0.25;
+    requestAnimationFrame(pulse);
+  };
+  pulse();
+
+  /* Pisca o slot */
+  const startScale = slot.scale.x;
+  const start = performance.now();
+  const anim = () => {
+    const t = (performance.now() - start) / 250;
+    if (t < 1) {
+      slot.scale.setScalar(startScale * (1 + Math.sin(t * Math.PI) * 0.5));
+      requestAnimationFrame(anim);
+    } else {
+      slot.scale.setScalar(startScale);
+    }
+  };
+  anim();
+
+  Toaster.info(`💡 Tente: ${pick.name}`);
+  Voice.speak(`Agora encaixe a ${pick.name}`);
+};
+
+['pointerdown','pointermove','touchstart','keydown'].forEach(evt => {
+  window.addEventListener(evt, resetIdleTimer, { passive: true });
+});
+
+/* ============================================================
    LOOP
    ============================================================ */
 const clock = new THREE.Clock();
@@ -1109,18 +1298,26 @@ const animate = () => {
   requestAnimationFrame(animate);
   const time = clock.getElapsedTime();
 
-  /* Flutuação das peças não colocadas */
   for (const [id, mesh] of state.meshes) {
     if (state.placedParts.has(id) || mesh === draggingObject) continue;
     const baseY = mesh.userData.originPosition?.y ?? -0.3;
-    mesh.position.y = baseY + Math.sin(time * 1.5 + mesh.position.x) * 0.05;
-    mesh.rotation.y += 0.003;
+    mesh.position.y = baseY + Math.sin(time * 1.5 + mesh.position.x) * 0.06;
+    mesh.rotation.y += 0.004;
   }
 
-  /* Hélice gira se encaixada */
+  /* Hélice gira */
   const propeller = state.meshes.get('propeller');
   if (propeller && state.placedParts.has('propeller')) {
-    propeller.rotation.x += 0.15;
+    propeller.rotation.x += 0.18;
+  }
+
+  /* Ghosts pulsantes */
+  for (const ghost of state.slots.values()) {
+    if (ghost.visible) {
+      const pulse = 0.7 + Math.sin(time * 2.5) * 0.3;
+      ghost.material.opacity = 0.25 + pulse * 0.25;
+      ghost.scale.setScalar(0.98 + pulse * 0.05);
+    }
   }
 
   controls.update();
@@ -1129,7 +1326,7 @@ const animate = () => {
 animate();
 
 /* ============================================================
-   PWA — SERVICE WORKER + INSTALL
+   PWA
    ============================================================ */
 const PWA = (() => {
   let deferredPrompt = null;
@@ -1185,6 +1382,7 @@ const PWA = (() => {
 $('btn-sound').textContent = Sound.isEnabled() ? '🔊' : '🔇';
 renderMenu();
 PWA.init();
+resetIdleTimer();
 setTimeout(() => $('loading').classList.add('hidden'), 300);
 </script>
 </body>
