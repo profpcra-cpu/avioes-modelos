@@ -1,6 +1,6 @@
 /* ============================================================
-   AIRPLANE BUILDER — Motor 3D + Menu + HUD + Voz
-   Camada 2: adiciona voz pedagógica em pt-BR
+   AIRPLANE BUILDER — Motor 3D + Menu + HUD + Voz + Pedagogia
+   Camada 3: integração com card pedagógico
    ============================================================ */
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
@@ -248,6 +248,7 @@ const updatePointer = (e) => {
 const onDown = (e) => {
   if (e.button !== undefined && e.button !== 0) return;
   if (!state.currentPlane) return;
+  if (isCardOpen()) return;
 
   updatePointer(e);
   raycaster.setFromCamera(pointer, camera);
@@ -366,7 +367,14 @@ const snap = (mesh, part, slot) => {
       Voice.snap(part.id);
       console.log(`✅ ${part.id} (${state.placedParts.size}/${state.currentPlane.parts.length})`);
 
-      if (state.placedParts.size === state.currentPlane.parts.length) {
+      const isLastPart = state.placedParts.size === state.currentPlane.parts.length;
+
+      if (!isLastPart) {
+        setTimeout(() => {
+          speakLessonIntro(part.id);
+          openLessonCard(part.id);
+        }, 500);
+      } else {
         setTimeout(onWin, 600);
       }
     }
@@ -529,12 +537,24 @@ if (btnVoice) {
   });
 }
 
-/* Boot */
+/* ---------- HOOKS ---------- */
+/* Quando o card fecha, verifica se completou o avião */
+window.__onCardClosed = () => {
+  if (state.currentPlane && state.placedParts.size === state.currentPlane.parts.length) {
+    setTimeout(onWin, 300);
+  }
+};
+
+/* Permitir que o pedagogy.js chame a voz */
+window.__voiceSpeak = (text) => Voice.say(text);
+
+/* ---------- BOOT ---------- */
 renderMenu();
+initPedagogy();
 document.getElementById('loading').classList.add('hidden');
 console.log('✅ game.js carregado —', AIRPLANES.length, 'aviões disponíveis');
 
-/* DEBUG: tecla V força teste de voz, tecla T toca som de teste */
+/* DEBUG: tecla V testa voz */
 document.addEventListener('keydown', (e) => {
   if (e.key === 'v' || e.key === 'V') {
     console.log('🎤 Testando voz...');
