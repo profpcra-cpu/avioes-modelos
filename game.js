@@ -5,6 +5,7 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { Voice } from './voice.js';
+import { openLessonCard, isCardOpen, initPedagogy, speakLessonIntro } from './pedagogy.js';
 
 /* ---------- CONFIG ---------- */
 const CONFIG = Object.freeze({
