@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <radialGradient id="bgGrad" cx="50%" cy="30%" r="80%">
+      <stop offset="0%" stop-color="#1e3a5f"/>
+      <stop offset="55%" stop-color="#0a1628"/>
+      <stop offset="100%" stop-color="#050d18"/>
+    </radialGradient>
+    <linearGradient id="planeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7dd3fc"/>
+      <stop offset="55%" stop-color="#0ea5e9"/>
+      <stop offset="100%" stop-color="#3b82f6"/>
+    </linearGradient>
+    <linearGradient id="wingGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#0284c7"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Fundo COR SÓLIDA até as bordas (importante para maskable) -->
+  <rect width="512" height="512" fill="url(#bgGrad)"/>
+
+  <!-- Avião reduzido em 78%, centralizado (safe zone) -->
+  <g transform="translate(256 256) scale(0.78) translate(-256 -256) rotate(-15) translate(-256 -256)">
+
+    <!-- Sombra -->
+    <ellipse cx="256" cy="390" rx="160" ry="18" fill="#000" opacity="0.35"/>
+
+    <!-- Fuselagem -->
+    <path d="M 256 90
+             C 275 90, 285 130, 285 200
+             L 285 360
+             C 285 385, 275 400, 256 400
+             C 237 400, 227 385, 227 360
+             L 227 200
+             C 227 130, 237 90, 256 90 Z"
+          fill="url(#planeGrad)"/>
+
+    <path d="M 256 100 L 256 390"
+          stroke="#ffffff" stroke-width="3" opacity="0.3" stroke-linecap="round"/>
+
+    <path d="M 227 240 L 90 300 L 90 340 L 227 305 Z" fill="url(#wingGrad)"/>
+    <path d="M 285 240 L 422 300 L 422 340 L 285 305 Z" fill="url(#wingGrad)"/>
+    <path d="M 234 355 L 165 380 L 165 395 L 234 380 Z" fill="#0284c7" opacity="0.9"/>
+    <path d="M 278 355 L 347 380 L 347 395 L 278 380 Z" fill="#0284c7" opacity="0.9"/>
+
+    <ellipse cx="256" cy="160" rx="20" ry="35" fill="#bae6fd" opacity="0.9"/>
+    <ellipse cx="256" cy="160" rx="12" ry="22" fill="#0ea5e9" opacity="0.7"/>
+    <circle cx="256" cy="100" r="6" fill="#ffffff" opacity="0.9"/>
+  </g>
+</svg>
