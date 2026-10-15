@@ -47,6 +47,11 @@
     color:#f0f9ff;
   }
   .btn-icon:hover{background:rgba(255,255,255,.15); transform:translateY(-2px)}
+  .btn-icon.active{
+    background:rgba(34,211,238,.2);
+    border-color:rgba(34,211,238,.6);
+    box-shadow:0 0 16px rgba(34,211,238,.4);
+  }
 
   .hud-title{
     text-align:center;
@@ -176,78 +181,115 @@
   .win-stat-value{font-size:22px; font-weight:800; color:#7dd3fc}
   .win-stat-label{font-size:9px; text-transform:uppercase; color:#94a3b8; letter-spacing:1px}
 
-  /* LOADING */
-  .loading{
+  /* ============================================================
+     CARD PEDAGÓGICO
+     ============================================================ */
+  .ped-overlay{
     position:fixed; inset:0;
-    display:flex; align-items:center; justify-content:center;
-    background:#0a1628;
-    z-index:300;
+    z-index:200;
+    display:none;
+    align-items:center; justify-content:center;
+    background:rgba(0,0,0,.8);
+    backdrop-filter:blur(10px);
+    padding:16px;
+    animation:fadeIn .3s ease;
+  }
+  .ped-overlay.active{display:flex}
+  @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+
+  .ped-card{
+    background:linear-gradient(135deg,rgba(30,58,95,.98),rgba(10,22,40,.98));
+    border:2px solid #7dd3fc;
+    border-radius:24px;
+    max-width:480px; width:100%;
+    max-height:90vh;
+    display:flex; flex-direction:column;
+    box-shadow:0 20px 60px rgba(0,0,0,.6), 0 0 60px rgba(125,211,252,.3);
+    animation:pop .4s cubic-bezier(.34,1.56,.64,1);
+    overflow:hidden;
+  }
+
+  .ped-header{
+    padding:16px 20px 12px;
+    display:flex; align-items:center; gap:14px;
+    border-bottom:1px solid rgba(125,211,252,.2);
+  }
+  .ped-emoji{
+    font-size:44px;
+    filter:drop-shadow(0 0 12px rgba(125,211,252,.6));
+  }
+  .ped-names{flex:1; min-width:0}
+  .ped-name-pt{
+    font-family:'Fredoka',sans-serif;
+    font-size:24px; font-weight:700;
+    color:#fff; margin:0;
+    line-height:1.1;
+  }
+  .ped-name-en{
     font-size:14px; color:#7dd3fc;
-    transition:opacity .4s;
+    font-weight:600;
+    margin-top:2px;
   }
-  .loading.hidden{opacity:0; pointer-events:none}
-</style>
-</head>
-<body>
-
-<div id="canvas-container"></div>
-
-<!-- MENU -->
-<div class="main-menu" id="main-menu">
-  <div class="menu-header">
-    <h1>✈️ AIRPLANE BUILDER</h1>
-    <p>Escolha um avião para montar</p>
-  </div>
-  <div class="plane-grid" id="plane-grid"></div>
-</div>
-
-<!-- HUD TOP -->
-<div class="hud-top" id="hud-top" style="display:none">
-  <div class="hud-actions">
-    <button class="btn-icon" id="btn-back" type="button" aria-label="Voltar">←</button>
-    <button class="btn-icon" id="btn-voice" type="button" aria-label="Voz" title="Voz">🔊</button>
-  </div>
-  <div>
-    <div class="hud-title" id="hud-title">AVIÃO</div>
-    <div class="hud-stats">
-      <span>Peças: <b id="stat-parts">0/0</b></span>
-      <span>Movs: <b id="stat-moves">0</b></span>
-      <span>Tempo: <b id="stat-time">0s</b></span>
-    </div>
-  </div>
-  <div></div>
-</div>
-
-<!-- HUD BOTTOM -->
-<div class="hud-bottom" id="hud-bottom" style="display:none">
-  <button class="btn secondary" id="btn-reset" type="button">🔄 Reiniciar</button>
-</div>
-
-<!-- WIN MODAL -->
-<div class="win-modal" id="win-modal">
-  <div class="win-card">
-    <div class="win-emoji">🎉</div>
-    <h2 id="win-title">Avião Montado!</h2>
-    <p id="win-message">Parabéns!</p>
-    <div class="win-stats">
-      <div><div class="win-stat-value" id="win-moves">0</div><div class="win-stat-label">Movs</div></div>
-      <div><div class="win-stat-value" id="win-time">0s</div><div class="win-stat-label">Tempo</div></div>
-    </div>
-    <button class="btn" id="btn-next" type="button" style="width:100%; justify-content:center">▶ Próximo Avião</button>
-  </div>
-</div>
-
-<div class="loading" id="loading">Carregando...</div>
-
-<script type="importmap">
-{
-  "imports": {
-    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
-    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+  .ped-name-en .pron{
+    font-size:11px; color:#94a3b8;
+    font-weight:400; margin-left:6px;
   }
-}
-</script>
+  .ped-close{
+    width:32px; height:32px;
+    border-radius:50%;
+    background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.15);
+    color:#fff; font-size:16px;
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer;
+    transition:all .2s;
+  }
+  .ped-close:hover{background:rgba(255,255,255,.15); transform:rotate(90deg)}
 
-<script type="module" src="./game.js"></script>
-</body>
-</html>
+  .ped-tabs{
+    display:flex;
+    padding:0 12px;
+    gap:4px;
+    background:rgba(0,0,0,.2);
+  }
+  .ped-tab{
+    flex:1;
+    padding:10px 6px 12px;
+    background:none; border:none;
+    color:#94a3b8;
+    font-size:11px; font-weight:700;
+    cursor:pointer;
+    border-bottom:3px solid transparent;
+    transition:all .2s;
+    display:flex; flex-direction:column;
+    align-items:center; gap:2px;
+    text-transform:uppercase;
+    letter-spacing:.5px;
+  }
+  .ped-tab .tab-icon{font-size:18px}
+  .ped-tab:hover{color:#f0f9ff}
+  .ped-tab.active{color:#fff; border-bottom-color:currentColor}
+  .ped-tab[data-tab="sci"].active{color:#22d3ee; border-bottom-color:#22d3ee}
+  .ped-tab[data-tab="mat"].active{color:#fbbf24; border-bottom-color:#fbbf24}
+  .ped-tab[data-tab="por"].active{color:#f472b6; border-bottom-color:#f472b6}
+  .ped-tab[data-tab="eng"].active{color:#a78bfa; border-bottom-color:#a78bfa}
+
+  .ped-body{
+    padding:20px;
+    overflow-y:auto;
+    flex:1;
+    -webkit-overflow-scrolling:touch;
+  }
+  .ped-body::-webkit-scrollbar{width:6px}
+  .ped-body::-webkit-scrollbar-thumb{background:rgba(125,211,252,.3); border-radius:3px}
+
+  .ped-pane{animation:fadeSlide .3s ease}
+  @keyframes fadeSlide{from{opacity:0; transform:translateY(8px)}to{opacity:1; transform:translateY(0)}}
+
+  .ped-pane-title{
+    font-family:'Fredoka',sans-serif;
+    font-size:17px; font-weight:600;
+    margin:0 0 12px;
+  }
+  .ped-pane-title.sci{color:#22d3ee}
+  .
