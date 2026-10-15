@@ -35,6 +35,7 @@
     pointer-events:none;
   }
   .hud-top > *{pointer-events:auto}
+  .hud-actions{display:flex; gap:8px; align-items:center}
   .btn-icon{
     width:40px; height:40px;
     border-radius:50%;
@@ -202,7 +203,10 @@
 
 <!-- HUD TOP -->
 <div class="hud-top" id="hud-top" style="display:none">
-  <button class="btn-icon" id="btn-back" type="button" aria-label="Voltar">←</button>
+  <div class="hud-actions">
+    <button class="btn-icon" id="btn-back" type="button" aria-label="Voltar">←</button>
+    <button class="btn-icon" id="btn-voice" type="button" aria-label="Voz" title="Voz">🔊</button>
+  </div>
   <div>
     <div class="hud-title" id="hud-title">AVIÃO</div>
     <div class="hud-stats">
